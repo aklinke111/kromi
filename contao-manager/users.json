@@ -1,0 +1,10 @@
+{
+    "users": {
+        "aklinke": {
+            "username": "aklinke",
+            "password": "$2y$13$UkSqyow\/0dRicJ4AlWcwM.0EDcneiZylPjpEInMvKlk4etwR0MoaS"
+        }
+    },
+    "version": 2,
+    "secret": "922832f53e98c156e89195c4a023c06bb426d2e6bfd8e11e224b0ce94a79afeff3ca1c18c0b8dbe1"
+}
