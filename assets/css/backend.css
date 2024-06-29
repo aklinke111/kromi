@@ -1,0 +1,35 @@
+#header .inner {
+    position:relative;
+    background-color:#a30000;
+}
+
+@media only screen and (min-width: 798px) {
+    #kundenlogo {
+        width:201px;
+        height:36px;
+        left:120px;
+        top:2px;
+        position:absolute;
+        display:inline-block;
+        background-image:url("assets/pics/kromiLogo.jpg");
+        background-repeat:no-repeat;
+        }
+}
+
+#tmenu li.submenu span.h2:hover {
+    background-color:#df343a;
+}
+
+ul#custommenubackend {
+    right:434px;
+    top:13px;
+    position:absolute;
+}
+
+#header a:hover {
+    color:#fc6a6f;
+}
+
+#tl_navigation .menu_level_1 li.current {
+    border-color:#df343a;
+}
