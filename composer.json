@@ -1,0 +1,52 @@
+{
+    "name": "contao/contao-demo",
+    "type": "contao-theme",
+    "description": "This is an example website for Contao, a powerful open source CMS that allows you to create professional websites and scalable web applications.",
+    "version": "5.3",
+    "license": "CC-BY-SA-4.0",
+    "authors": [
+        {
+            "name": "Sascha Müller",
+            "homepage": "https://github.com/sascha-mueller"
+        },
+        {
+            "name": "Contao Community",
+            "homepage": "https://to.contao.org/demo-contributors"
+        }
+    ],
+    "funding": [
+        {
+            "type": "other",
+            "url": "https://to.contao.org/donate"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/contao/contao-demo/issues",
+        "forum": "https://community.contao.org",
+        "source": "https://github.com/contao/contao-demo",
+        "docs": "https://docs.contao.org"
+    },
+    "require": {
+        "contao/calendar-bundle": "5.3.*",
+        "contao/comments-bundle": "5.3.*",
+        "contao/conflicts": "*@dev",
+        "contao/faq-bundle": "5.3.*",
+        "contao/listing-bundle": "5.3.*",
+        "contao/manager-bundle": "5.3.*",
+        "contao/news-bundle": "5.3.*",
+        "contao/newsletter-bundle": "5.3.*",
+        "terminal42/contao-url-rewrite": "^1.7"
+    },
+    "extra": {
+        "contao-component-dir": "assets",
+        "public-dir": "public"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@php vendor/bin/contao-setup"
+        ],
+        "post-update-cmd": [
+            "@php vendor/bin/contao-setup"
+        ]
+    }
+}
