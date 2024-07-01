@@ -151,7 +151,7 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{article_legend},sortlyId;{suppliers_legend},supplierArticleNo;{orders_legend},orderQuantity,packageUnit,price,discount;orderDate,invoiceDate;{delivery_legend},invoiceNoDMS, delivered;{note_legend:hide},note'
+        'default' => '{article_legend},sortlyId;{suppliers_legend},supplierArticleNo;{orders_legend};orderQuantity,packageUnit,price,discount;orderDate,invoiceDate;{delivery_legend},invoiceNoDMS, delivered;{note_legend:hide},note'
     ],
 ];
 

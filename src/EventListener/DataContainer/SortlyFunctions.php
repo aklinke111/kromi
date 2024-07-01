@@ -46,9 +46,9 @@ class SortlyFunctions
         if ($dc->activeRecord !== null) {
 
             $price = $dc->activeRecord->price;
-            $articleNo = $dc->activeRecord->articleNo;
+            $sortlyId = $dc->activeRecord->sortlyId;
 
-            $sql = "Update sortly set price = $price WHERE kromiArticleNo LIKE '$articleNo'";
+            $sql = "Update sortly set price = $price WHERE sortlyId LIKE '$sortlyId'";
             $db->prepare($sql)->execute();
 
         //log

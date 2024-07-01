@@ -8,13 +8,13 @@ if (isset($_GET['webhookFunction'])) {
     $function = $_GET['webhookFunction'];
     
     if($function == "calculatePricesBOM"){
-        echo calculatingIVMs($db);
-        echo balanceNeededPartsAndPartsOnStock($db);
-//        createReport($db);
+//        echo calculatingIVMs($db);
+//        echo balanceNeededPartsAndPartsOnStock($db);
+////        createReport($db);
         
-//        calculatingIVMs($db);
-//        balanceNeededPartsAndPartsOnStock($db);
-//        createReport($db);
+        calculatingIVMs($db);
+        balanceNeededPartsAndPartsOnStock($db);
+        createReport($db);
     }
 }
 
