@@ -10,13 +10,12 @@ if (isset($_GET['webhookFunction'])) {
     $function = $_GET['webhookFunction'];
     if($function == "controllingReport"){
 
-//        echo fillTable($db, $tableName);
+        echo fillTable($db, $tableName);
         echo tableToCSV($db, $tableName);
     }
 }
 
 function fillTable($db, $tableName){
-
     
     $sql = "TRUNCATE TABLE $tableName";
     $result = $db->query($sql);
@@ -122,7 +121,7 @@ function executeQuery($db,$tableName,$Version,$Period,$CostObject,$CostUnit,$KTC
 
 
 function tableToCSV($db, $tableName){
-
+    $msg = "";
     // Query the table
     $sql = "SELECT * FROM $tableName";
     $result = $db->query($sql);
@@ -164,6 +163,7 @@ function tableToCSV($db, $tableName){
         mailCSV($output);
 
     } else {
-        echo "0 results";
+        $msg.=  "0 results";
     }
+    return $msg;
 }

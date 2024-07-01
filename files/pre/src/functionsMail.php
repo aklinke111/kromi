@@ -1,7 +1,7 @@
 <?php
 
 function sendMail($content){
-    
+    $msg = "";
     $boundary = "";
     $database = "xm3xbj34_kromiag";
 
@@ -28,15 +28,17 @@ function sendMail($content){
 
     // Send email
     if (mail($to, $subject, $body.$msgDelete, $headers)) {
-        echo "Backupfile ''$backupFile'' successfully created and email sent.";;
+        $msg.= "Backupfile ''$backupFile'' successfully created and email sent.";;
     } else {
-        echo 'Failed to send email';
+        $msg.= 'Failed to send email';
     }
+    
+    return $msg;
 }
 
 
 function mailCSV($csvContents){
-    
+    $msg = "";
     // Generate CSV data
 //    $csvContents = generateCsvData();
     
@@ -74,9 +76,9 @@ function mailCSV($csvContents){
     
     // Send email
     if (mail($to, $subject, $body, $headers)) {
-        echo 'Email sent successfully';
+        $msg.= 'Email sent successfully';
     } else {
-        echo 'Failed to send email';
+        $msg.= 'Failed to send email';
     }
 }
 

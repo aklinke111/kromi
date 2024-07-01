@@ -58,22 +58,22 @@ $GLOBALS['BE_MOD']['engineering']['bom'] = [
 
 
 
-$GLOBALS['BE_MOD']['misc.']['myLogs'] = array
-(
-	'tables' => array('tl_myLogs')
-);
-$GLOBALS['BE_MOD']['misc.']['errorNote'] = array
-(
-	'tables' => array('tl_errorNote')
-);
-$GLOBALS['BE_MOD']['misc.']['errorCategory'] = array
-(
-	'tables' => array('tl_errorCategory')
-);
-$GLOBALS['BE_MOD']['misc.']['aGlobals'] = array
-(
-	'tables' => array('tl_aGlobals')
-);
+//$GLOBALS['BE_MOD']['misc.']['myLogs'] = array
+//(
+//	'tables' => array('tl_myLogs')
+//);
+//$GLOBALS['BE_MOD']['misc.']['errorNote'] = array
+//(
+//	'tables' => array('tl_errorNote')
+//);
+//$GLOBALS['BE_MOD']['misc.']['errorCategory'] = array
+//(
+//	'tables' => array('tl_errorCategory')
+//);
+//$GLOBALS['BE_MOD']['misc.']['aGlobals'] = array
+//(
+//	'tables' => array('tl_aGlobals')
+//);
 
 
 
