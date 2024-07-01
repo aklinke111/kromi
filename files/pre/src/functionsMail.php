@@ -1,107 +1,53 @@
 <?php
 
-function sendMail($content){
+
+
+function sendFile($file){
+
     $msg = "";
-    $boundary = "";
-    $database = "xm3xbj34_kromiag";
-
-//    //Delete files older threshold
-//    $backupFilePath = "../db/backupMysql";
-//    $msgDelete = deleteFiles($backupFilePath);
-
-    // Recipient email
+    // Email configuration
     $to = 'aklinke111@gmail.com';
-    
-    // Email subject
-    $subject = 'Database Dump File from '.$database;
-    
-    // Email body
-    $body = "--{$boundary}\r\n";
-    $body .= "Content-Type: text/plain; charset=\"UTF-8\"\r\n";
-    $body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-    $body .= "Database dump file in path '".$backupFile."' succesfully generated!\r\n\r\n";
+    $subject = 'CSV File Attachment';
+    $message = 'Please find the attached CSV file.';
 
-    // Email headers
+    // Read the file content
+
+    $content = file_get_contents($file);
+//            echo "a";
+//    die();
+    $content = chunk_split(base64_encode($content));
+
+    // a unique boundary string
+    $boundary = md5(uniqid(time()));
+
+    // Headers
     $headers = "From: Andreas Klinke <ak@kromiag.de>\r\n";
+    $headers .= "Reply-To: andreas.klinke@kromi.de\r\n";
     $headers .= "MIME-Version: 1.0\r\n";
     $headers .= "Content-Type: multipart/mixed; boundary=\"{$boundary}\"\r\n";
 
+    // Message body
+    $body = "--{$boundary}\r\n";
+    $body .= "Content-Type: text/plain; charset=ISO-8859-1\r\n";
+    $body .= "Content-Transfer-Encoding: 7bit\r\n";
+    $body .= "\r\n";
+    $body .= $message . "\r\n";
+    $body .= "\r\n";
+    $body .= "--{$boundary}\r\n";
+    $body .= "Content-Type: text/csv; name=\"{$file}\"\r\n";
+    $body .= "Content-Transfer-Encoding: base64\r\n";
+    $body .= "Content-Disposition: attachment; filename=\"{$file}\"\r\n";
+    $body .= "\r\n";
+    $body .= $content . "\r\n";
+    $body .= "\r\n";
+    $body .= "--{$boundary}--\r\n";
+
     // Send email
-    if (mail($to, $subject, $body.$msgDelete, $headers)) {
-        $msg.= "Backupfile ''$backupFile'' successfully created and email sent.";;
+    if (mail($to, $subject, $body, $headers)) {
+         $msg.= 'Email sent successfully.';
     } else {
-        $msg.= 'Failed to send email';
+        $msg.= 'Failed to send email.';
     }
     
     return $msg;
 }
-
-
-function mailCSV($csvContents){
-    $msg = "";
-    // Generate CSV data
-//    $csvContents = generateCsvData();
-    
-    // Boundary 
-    $boundary = md5(time());
-
-    // Recipient email
-    $to = 'aklinke111@gmail.com';
-    
-    // Email subject
-    $subject = 'Here is your CSV file';
-    
-    // Email body
-    $body = "--{$boundary}\r\n";
-    $body .= "Content-Type: text/plain; charset=\"UTF-8\"\r\n";
-    $body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-    $body .= 'Please find the attached CSV file containing user data.';
-    
-    // Email headers
-    $headers = "From: Andreas Klinke <ak@kromiag.de>\r\n";
-    $headers .= "MIME-Version: 1.0\r\n";
-    $headers .= "Content-Type: multipart/mixed; boundary=\"{$boundary}\"\r\n";
-
-//    // Attachment
-//    $attachmentName = "users.csv";
-//    $attachmentContent = chunk_split(base64_encode($csvContents));
-    
-//    // Email headers
-//    $headers = "From: Andreas Klinke <ak@kromiag.de>\r\n";
-//    $headers .= "Content-Type: text/csv; name=\"$attachmentName\"\r\n";
-//    $headers .= "Content-Transfer-Encoding: base64\r\n";
-//    $headers .= "Content-Disposition: attachment; filename=\"$attachmentName\"\r\n\r\n";
-//    $headers .= "$attachmentContent\r\n";
-//    $headers .= "--$boundary--";
-    
-    // Send email
-    if (mail($to, $subject, $body, $headers)) {
-        $msg.= 'Email sent successfully';
-    } else {
-        $msg.= 'Failed to send email';
-    }
-}
-
-
-
-//function sendMail($msg){
-//    //Prepare mail
-//    $mailTo = "aklinke111@gmail.com";
-//    $title = "Mail von import.kromiag.de";
-//    $mailFrom = "From: Andreas Klinke <ak@kromiag.de>\r\n";
-//    $mailFrom .= "Reply-To:  ak@kromiag.de\r\n";
-//    $mailFrom .= "Content-Type: text/html\r\n";
-////    $mailFrom .= "Content-Type: application/json\r\n"; 
-//    
-//    mail($mailTo, $title, $msg, $mailFrom);
-//    
-//    // Send email
-//    if (mail($mailTo, $title, $msg, $mailFrom)) {
-//        return "Email sent with message: $msg ";
-//    } else {
-//        return "Failed to send email with message: $msg ";
-//    }
-//}
-
-    
-    

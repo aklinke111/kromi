@@ -119,22 +119,30 @@ function executeQuery($db,$tableName,$Version,$Period,$CostObject,$CostUnit,$KTC
 }
 
 
-
 function tableToCSV($db, $tableName){
+    
     $msg = "";
+        
+    // location backupfile tmp
+    $backupFilePath = $_SERVER['DOCUMENT_ROOT']."/files/pre/ktc/finance/backupAllocation/";
+    
+    // location backupfile new
+    $database = "xm3xbj34_kromiag";
+    $dateprint = date("Y-m-d_H:i");
+    $prefixFilename = $database."_";
+    $filepathNew = $backupFilePath.$prefixFilename.$dateprint.'.csv';
+    
     // Query the table
     $sql = "SELECT * FROM $tableName";
     $result = $db->query($sql);
 
     if ($result->num_rows > 0) {
-        // Open output stream
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment;filename=KTC-Allocation.csv');
-        $output = fopen('php://output', 'w');
+        // File name and path
+        $filename = 'KTC-Allocation.csv';
+        $filepath = $backupFilePath.$filename;
 
-        // Write sheet name or any relevant header info (not typically used in CSV)
-    //    $sheetName = "KTC-Allocation";  // You can change this to any name you prefer
-    //    fputcsv($output, array($sheetName));  // Writing the sheet name
+        // Open file in write mode
+        $file = fopen($filepath, 'w');
 
         // Fetch the column names
         $fields = $result->fetch_fields();
@@ -149,21 +157,43 @@ function tableToCSV($db, $tableName){
               $header[] = $field->name;  
             } 
         }
-
-        fputcsv($output, $header);
+        // Write Header
+        fputcsv($file, $header);
 
         // Write rows
         while ($row = $result->fetch_assoc()) {
-            fputcsv($output, $row);
+            fputcsv($file, $row);
         }
 
-        //Send Mail
-        fclose($output);
+        //Close the file
+        fclose($file);
         
-        mailCSV($output);
-
+        $msg.= sendFile($filepath);
+        
     } else {
         $msg.=  "0 results";
     }
+    
+    // rename file
+    $msg.= renameFile($filepath, $filepathNew);
+    
+    return $msg;
+}
+
+
+function renameFile($oldName, $newName){
+    $msg = "";
+    // Check if the file exists before renaming
+    if (file_exists($oldName)) {
+        // Rename the file
+        if (rename($oldName, $newName)) {
+            $msg.= "File renamed successfully to $newName.";
+        } else {
+            $msg.= "Failed to rename the file.";
+        }
+    } else {
+        $msg.= "File $oldName does not exist.";
+    } 
+    
     return $msg;
 }
