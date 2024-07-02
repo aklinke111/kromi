@@ -16,41 +16,25 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
         'onsubmit_callback' => [
             [UpdateSortly::class, 'updatePrice']
         ],        
-        'ptable' => 'tl_supplier',
+        'switchToEdit' => true,
         'sql' => [
             'keys' => [
                 'id' => 'primary',
                 'tstamp' => 'index',
             ],
         ],
-        'onload_callback' => [
-            function () {
-                $db = Database::getInstance();
-                $pid = Input::get('pid');
-                if (empty($pid)) {
-                    return;
-                }
-                $result = $db->prepare('SELECT `name` FROM `tl_supplier` WHERE `id` = ?')
-                             ->execute([$pid]);
-                $prefix = strtoupper(substr($result->name, 0, 2));
-                $GLOBALS['TL_DCA']['tl_orders']['fields']['name']['default'] = $prefix;
-            },
-        ]
     ],
     'list' => [
         'sorting' => [
-            'mode' => 4,
-            'fields' => ['sortlyId','orderDate DESC'],
-            'headerFields' => ['sortlyId','orderQuantity'],
-            'panelLayout' => 'search,limit',
-            'child_record_callback' => function (array $row) {
-                return '<div class="tl_content_left">'
-                        . $row['orderQuantity'].' pcs. ordered on '.$row['orderDate']
-                        . ' for a price of '.round($row['price'],4).' €/pc. -> '  
-                        . 'delivery state '.$row['delivered'].'  ['                        
-                        . 'DMS invoice no. '.$row['invoiceNoDMS'].'  ]'   
-                        . '</div>';
-            },
+            'mode' => 1,
+            'fields' => ['supplierId'],
+            'flag' => 11,
+            'panelLayout' => 'search,limit,sort'
+        ],
+        'label' => [
+            'fields' => ['supplierId','sortlyId','supplierArticleNo','orderQuantity', 'price','orderDate', 'invoiceDate', 'delivered', 'note'],
+            'format' => '%s',
+            'showColumns' => true,
         ],
         'operations' => [
             'edit' => [
@@ -72,10 +56,13 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
         'id' => [
             'sql' => ['type' => 'integer', 'unsigned' => true, 'autoincrement' => true],
         ],
-        'pid' => [
-            'foreignKey' => 'tl_supplier.id',
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0],
-            'relation' => ['type'=>'belongsTo', 'load'=>'lazy']
+        'supplierId' => [
+            'inputType'               => 'select',
+            'filter'                  => true,
+            'search'                  => true,           
+            'foreignKey'              => 'tl_supplier.name',
+            'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),            
+            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
         ],
         'tstamp' => [
             'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
@@ -151,7 +138,7 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{article_legend},sortlyId;{suppliers_legend},supplierArticleNo;{orders_legend};orderQuantity,packageUnit,price,discount;orderDate,invoiceDate;{delivery_legend},invoiceNoDMS, delivered;{note_legend:hide},note'
+        'default' => '{article_legend},sortlyId;{suppliers_legend},supplierId,supplierArticleNo;{orders_legend};orderQuantity,packageUnit,price,discount;orderDate,invoiceDate;{delivery_legend},invoiceNoDMS, delivered;{note_legend:hide},note'
     ],
 ];
 
@@ -172,5 +159,19 @@ class tl_orders extends Backend
         
         return $value;
     }
+    
+//        public function supplier()
+//    {
+//        //\System::log('The e-mail was sent successfully', __METHOD__, TL_GENERAL);
+//        $value = array();        
+//        $result = $this->Database->prepare("SELECT DISTINCT sortlyId, name FROM sortly WHERE pid IN(58670984,72430051) ORDER BY sortlyId")
+//                                 ->execute();
+//        while($result->next())
+//        {
+//                $value[$result->sortlyId] = $result->sortlyId." - ".$result->name;
+//        }
+//        
+//        return $value;
+//    }
             
 }

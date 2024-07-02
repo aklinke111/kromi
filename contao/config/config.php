@@ -21,12 +21,16 @@ $GLOBALS['BE_MOD']['income']['payments'] = [
 $GLOBALS['BE_MOD']['enrichment']['customer'] = [
     'tables' => ['tl_customer'],
 ];
+$GLOBALS['BE_MOD']['enrichment']['supplier'] = [
+    'tables' => ['tl_supplier'],
+];
 $GLOBALS['BE_MOD']['enrichment']['toolcenter'] = [
     'tables' => ['tl_toolcenter'],
 ];
 $GLOBALS['BE_MOD']['enrichment']['costUnits'] = [
     'tables' => ['tl_costUnits'],
 ];
+
 //$GLOBALS['BE_MOD']['enrichment']['ivmPlus'] = [
 //    'tables' => ['tl_sortlyTemplatesIVMplus'],
 //];
@@ -49,8 +53,8 @@ $GLOBALS['BE_MOD']['inventory']['ToolcenterInventory'] = [
 
 
 
-$GLOBALS['BE_MOD']['engineering']['supplier'] = [
-    'tables' => ['tl_supplier', 'tl_orders'],
+$GLOBALS['BE_MOD']['engineering']['orders'] = [
+    'tables' => ['tl_orders'],
 ];
 $GLOBALS['BE_MOD']['engineering']['bom'] = [
     'tables' => ['tl_sortlyTemplatesIVM', 'tl_bom'],

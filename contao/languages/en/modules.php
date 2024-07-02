@@ -10,6 +10,7 @@ $GLOBALS['TL_LANG']['MOD']['heliotronicCategory'] = 'HT Categories';
 $GLOBALS['TL_LANG']['MOD']['payments'] = 'Payments';
 
 // Enrichment
+$GLOBALS['TL_LANG']['MOD']['supplier'] = 'Suppliers';
 $GLOBALS['TL_LANG']['MOD']['customer'] = 'Customers +';
 $GLOBALS['TL_LANG']['MOD']['toolcenter'] = 'Toolcenters +';
 $GLOBALS['TL_LANG']['MOD']['costUnits'] = 'Cost Units +'; 
@@ -24,7 +25,7 @@ $GLOBALS['TL_LANG']['MOD']['ToolcenterProjectStatus'] = 'Project Status';
 $GLOBALS['TL_LANG']['MOD']['ToolcenterInventory'] = 'Toolcenter Inventories';
 
 // engineering
-$GLOBALS['TL_LANG']['MOD']['supplier'] = 'Suppliers & Orders';
+$GLOBALS['TL_LANG']['MOD']['orders'] = 'Orders';
 $GLOBALS['TL_LANG']['MOD']['bom'] = 'IVM & BOM';
 
 // misc.

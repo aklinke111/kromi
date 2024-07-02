@@ -44,9 +44,9 @@ function sendFile($file){
 
     // Send email
     if (mail($to, $subject, $body, $headers)) {
-         $msg.= 'Email sent successfully.';
+         $msg.= 'Email sent successfully.<br>';
     } else {
-        $msg.= 'Failed to send email.';
+        $msg.= 'Failed to send email.<br>';
     }
     
     return $msg;

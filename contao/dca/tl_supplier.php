@@ -7,13 +7,15 @@ use Contao\DC_Table;
 $GLOBALS['TL_DCA']['tl_supplier'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
-        'ctable' => ['tl_orders'],
         'enableVersioning' => true,
+//        'onload_callback' => array
+//        (
+//                array('tl_supplier', 'supplier')
+//        ),
         'switchToEdit' => true,
         'sql' => [
             'keys' => [
                 'id' => 'primary',
-                'tstamp' => 'index',
             ],
         ],
     ],
@@ -31,9 +33,9 @@ $GLOBALS['TL_DCA']['tl_supplier'] = [
             'showColumns' => true,            
         ],
         'operations' => [
-            'edit' => [
-                'href' => 'table=tl_orders',
-                'icon' => 'children.svg',
+            'editheader' => [
+                'href' => 'act=edit',
+                'icon' => 'header.svg',
             ],
             'editheader' => [
                 'href' => 'act=edit',
