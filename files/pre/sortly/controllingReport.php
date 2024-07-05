@@ -1,6 +1,7 @@
 <?php
-    
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functionsMail.php";
+
+include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/files.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/mail.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
 
 $tableName = "controllingReportKtc";
@@ -130,7 +131,8 @@ function tableToCSV($db, $tableName){
     $database = "xm3xbj34_kromiag";
     $dateprint = date("Y-m-d_H:i");
     $prefixFilename = $database."_";
-    $filepathNew = $backupFilePath.$prefixFilename.$dateprint.'.csv';
+    $filename = 'KTC-Allocation.csv';
+    $filepathNew = $backupFilePath.$dateprint."_".$filename;
     
     // Query the table
     $sql = "SELECT * FROM $tableName";
@@ -138,7 +140,6 @@ function tableToCSV($db, $tableName){
 
     if ($result->num_rows > 0) {
         // File name and path
-        $filename = 'KTC-Allocation.csv';
         $filepath = $backupFilePath.$filename;
 
         // Open file in write mode
@@ -168,7 +169,13 @@ function tableToCSV($db, $tableName){
         //Close the file
         fclose($file);
         
-        $msg.= sendFile($filepath);
+        // prepare Mail with attachment
+//        $to = 'Christiane.Roeller@kromi.de, Holger.Schneidereit@kromi.de, andreas.klinke@kromi.de';
+        $to = 'andreas.klinke@kromi.de';
+        $subject = $filename;
+        $message = "Please find the attached file '".$filename."'";
+        
+        $msg.= sendFile($to, $subject, $message, $filepath, $filename);
         
     } else {
         $msg.=  "0 results";
@@ -176,24 +183,6 @@ function tableToCSV($db, $tableName){
     
     // rename file
     $msg.= renameFile($filepath, $filepathNew);
-    
-    return $msg;
-}
-
-
-function renameFile($oldName, $newName){
-    $msg = "";
-    // Check if the file exists before renaming
-    if (file_exists($oldName)) {
-        // Rename the file
-        if (rename($oldName, $newName)) {
-            $msg.= "File renamed successfully to $newName.";
-        } else {
-            $msg.= "Failed to rename the file.";
-        }
-    } else {
-        $msg.= "File $oldName does not exist.";
-    } 
     
     return $msg;
 }

@@ -12736,7 +12736,7 @@ namespace Tqdev\PhpCrudApi {
         'username' => 'xm3xbj34_aklinke',
         'password' => 'Kromi2000!',
         'database' => 'xm3xbj34_kromiag',
-//        'middlewares' => 'basicAuth',
+        'middlewares' => 'basicAuth',
         'debug' => false
     ]);
     $request = RequestFactory::fromGlobals();

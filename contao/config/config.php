@@ -13,8 +13,16 @@ $GLOBALS['BE_MOD']['heliotronic']['heliotronicCategory'] = [
 
 
 
-$GLOBALS['BE_MOD']['income']['payments'] = [
+$GLOBALS['BE_MOD']['income']['customerPayments'] = [
     'tables' => ['tl_payments'],
+];
+
+
+$GLOBALS['BE_MOD']['expenses']['kromiExpenses'] = [
+    'tables' => ['tl_invoices'],
+];
+$GLOBALS['BE_MOD']['expenses']['kromiExpensesCategory'] = [
+    'tables' => ['tl_paymentCategory'],
 ];
 
 
@@ -47,10 +55,18 @@ $GLOBALS['BE_MOD']['projects']['ToolcenterProjectStatus'] = [
 
 
 
+$GLOBALS['BE_MOD']['finance']['Forecast Category'] = [
+    'tables' => ['tl_forecastCategory'],
+];
+$GLOBALS['BE_MOD']['finance']['costUnits'] = [
+    'tables' => ['tl_costUnits'],
+];
+
+
+
 $GLOBALS['BE_MOD']['inventory']['ToolcenterInventory'] = [
     'tables' => ['tl_toolcenterInventory'],
 ];
-
 
 
 $GLOBALS['BE_MOD']['engineering']['orders'] = [
@@ -62,22 +78,22 @@ $GLOBALS['BE_MOD']['engineering']['bom'] = [
 
 
 
-//$GLOBALS['BE_MOD']['misc.']['myLogs'] = array
-//(
-//	'tables' => array('tl_myLogs')
-//);
-//$GLOBALS['BE_MOD']['misc.']['errorNote'] = array
-//(
-//	'tables' => array('tl_errorNote')
-//);
-//$GLOBALS['BE_MOD']['misc.']['errorCategory'] = array
-//(
-//	'tables' => array('tl_errorCategory')
-//);
-//$GLOBALS['BE_MOD']['misc.']['aGlobals'] = array
-//(
-//	'tables' => array('tl_aGlobals')
-//);
+$GLOBALS['BE_MOD']['misc.']['myLogs'] = array
+(
+	'tables' => array('tl_myLogs')
+);
+$GLOBALS['BE_MOD']['misc.']['errorNote'] = array
+(
+	'tables' => array('tl_errorNote')
+);
+$GLOBALS['BE_MOD']['misc.']['errorCategory'] = array
+(
+	'tables' => array('tl_errorCategory')
+);
+$GLOBALS['BE_MOD']['misc.']['aGlobals'] = array
+(
+	'tables' => array('tl_aGlobals')
+);
 
 
 

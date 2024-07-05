@@ -45,6 +45,10 @@ if ($result->num_rows > 0) {
     // Close tags
     echo '</Table>';
     echo '</Worksheet>';
+    
+    
+    
+    
     echo '</Workbook>';
 } else {
     echo 'No records found.';

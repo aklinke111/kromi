@@ -27,7 +27,7 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'panelLayout' => 'search,limit'
         ],
         'label' => [
-            'fields' => ['name','note','sortlyId','quantity','quantityRaw','quantityForecast','quantityOverhaul','quantityReturn','quantityProjects','quantityAvailable','quantityMinimum','sid','pid'],
+            'fields' => ['name','note','sortlyId','quantity','quantityRaw','quantityForecast','quantityOverhaul','quantityReturn','quantityProjects','quantityAvailable','quantityMinimum','sid','active'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -164,6 +164,18 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'eval' => ['tl_class' => 'clr', 'enabled' => true],
             'sql' => ['type' => 'text', 'notnull' => false]
         ],
+        'active' => [
+            'inputType' => 'checkbox',
+            'filter'                  => true,
+            'search'                  => true,
+            'sql' => ['type' => 'boolean','default' => false]
+        ],
+        'financeReport' => [
+            'inputType' => 'checkbox',
+            'filter'                  => true,
+            'search'                  => true,
+            'sql' => ['type' => 'boolean','default' => false]
+        ],          
         'created' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50 wizard','enabled' => true],
@@ -171,6 +183,6 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{sortlyTemplatesIVM},name,sortlyId;photoUrl,photoName;quantityForecast,quantityMinimum;created,sid,pid,note'
+        'default' => '{sortlyTemplatesIVM},name,sortlyId;photoUrl,photoName;quantityForecast,quantityMinimum;created,sid,pid,active,financeReport,note'
     ],
 ];

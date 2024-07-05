@@ -1,20 +1,18 @@
 <?php
 
 
-
-function sendFile($file){
+// Send Mail with attachment
+function sendFile($to, $subject, $message, $file, $filename){
 
     $msg = "";
-    // Email configuration
-    $to = 'aklinke111@gmail.com';
-    $subject = 'CSV File Attachment';
-    $message = 'Please find the attached CSV file.';
+//    // Email configuration
+//    $to = 'aklinke111@gmail.com';
+//    $subject = 'CSV File Attachment';
+//    $message = 'Please find the attached CSV file.';
 
     // Read the file content
-
     $content = file_get_contents($file);
-//            echo "a";
-//    die();
+
     $content = chunk_split(base64_encode($content));
 
     // a unique boundary string
@@ -34,9 +32,9 @@ function sendFile($file){
     $body .= $message . "\r\n";
     $body .= "\r\n";
     $body .= "--{$boundary}\r\n";
-    $body .= "Content-Type: text/csv; name=\"{$file}\"\r\n";
+    $body .= "Content-Type: text/csv; name=\"{$filename}\"\r\n";
     $body .= "Content-Transfer-Encoding: base64\r\n";
-    $body .= "Content-Disposition: attachment; filename=\"{$file}\"\r\n";
+    $body .= "Content-Disposition: attachment; filename=\"{$filename}\"\r\n";
     $body .= "\r\n";
     $body .= $content . "\r\n";
     $body .= "\r\n";
@@ -44,7 +42,7 @@ function sendFile($file){
 
     // Send email
     if (mail($to, $subject, $body, $headers)) {
-         $msg.= 'Email sent successfully.<br>';
+         $msg.= 'Email sent successfully to '.$to.'<br>';
     } else {
         $msg.= 'Failed to send email.<br>';
     }

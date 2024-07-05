@@ -8,25 +8,24 @@ if (isset($_GET['webhookFunction'])) {
     $function = $_GET['webhookFunction'];
     
     if($function == "calculatePricesBOM"){
-//        echo calculatingIVMs($db);
-//        echo balanceNeededPartsAndPartsOnStock($db);
-////        createReport($db);
+        echo calculatingIVMs($db);
+        echo balanceNeededPartsAndPartsOnStock($db);
+        //createReport($db);
         
-        calculatingIVMs($db);
-        balanceNeededPartsAndPartsOnStock($db);
-        createReport($db);
+//        calculatingIVMs($db);
+//        balanceNeededPartsAndPartsOnStock($db);
+//        createReport($db);
     }
 }
 
 function calculatingIVMs($db){
-//    echo "arsch";
-//    die();
+
     $sql = "TRUNCATE TABLE bomCalculations";
     $result = $db->query($sql);
     
     $msg = "";
    // loop all IVMs
-    $sql = "Select id,sortlyId,name,quantity,price from tl_sortlyTemplatesIVM";
+    $sql = "Select id, sortlyId, name, quantity, price from tl_sortlyTemplatesIVM";
     $result = $db->query($sql);
     while($item = $result->fetch_assoc()){ 
         $pid = $item['id'];
@@ -184,7 +183,7 @@ From
     sortly Right Join
     tl_bom On sortly.sortlyId = tl_bom.sortlyId Left Join
     tl_orders On tl_bom.sortlyId = tl_orders.sortlyId Left Join
-    tl_supplier On tl_supplier.id = tl_orders.pid
+    tl_supplier On tl_supplier.id = tl_orders.supplierId
 Where
     tl_bom.pid in ($pid) And
     tl_bom.calculate = 1 And

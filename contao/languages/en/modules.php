@@ -2,9 +2,9 @@
 // contao/languages/en/modules.php
 
 // Heliotronic
-$GLOBALS['TL_LANG']['MOD']['heliotronicLicence'] = 'HT Licences';
-$GLOBALS['TL_LANG']['MOD']['heliotronicInvoices'] = 'HT Invoices';
-$GLOBALS['TL_LANG']['MOD']['heliotronicCategory'] = 'HT Categories';
+$GLOBALS['TL_LANG']['MOD']['heliotronicLicence'] = 'Licences';
+$GLOBALS['TL_LANG']['MOD']['heliotronicInvoices'] = 'Invoices';
+$GLOBALS['TL_LANG']['MOD']['heliotronicCategory'] = 'Categories';
 
 // income
 $GLOBALS['TL_LANG']['MOD']['payments'] = 'Payments';

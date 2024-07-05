@@ -126,10 +126,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             
             <hr class="button-separator">
 
-            <button onclick="submitForm('ivmPartsBom')">
+            <button onclick="submitForm('financeBom')">
+                <i class="fas fa-exclamation-circle button-icon"></i>
+                <span>Finance 1 - BOM-list</span>
+            </button>
+            <button onclick="submitForm('ivmPartsBom_HTML')">
                 <i class="fas fa-exclamation-circle button-icon"></i>
                 <span>BOM list IVM & parts</span>
-            </button>
+            </button>            
             <button onclick="submitForm('nestedListSortly')">
                 <i class="fas fa-exclamation-circle button-icon"></i>
                 <span>SORTLY nested structure</span>

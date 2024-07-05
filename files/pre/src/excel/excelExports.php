@@ -6,9 +6,9 @@ include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
 // Sample data array
 $data = [
     ['ID', 'Name', 'Email'],
-    [1, 'John Doe', 'john@example.com'],
-    [2, 'Jane Smith', 'jane@example.com'],
-    [3, 'Sam Brown', 'sam@example.com'],
+    [1, 'John DÖ', 'john@example.com'],
+    [2, 'Jane Smääth', 'jane@example.com'],
+    [3, 'Sam ()/', 'sam@example.com'],
 ];
 
 // Set the headers to make the browser download the file
@@ -48,37 +48,5 @@ for ($i = 1; $i < count($data); $i++) {
 // Close tags
 echo '</Table>';
 echo '</Worksheet>';
-
-
-
-
-// Worksheet
-echo '<Worksheet ss:Name="Testsheet">';
-echo '<Table>';
-
-// Write header row
-echo '<Row>';
-foreach ($data[0] as $header) {
-    echo '<Cell><Data ss:Type="String">' . htmlspecialchars($header) . '</Data></Cell>';
-}
-echo '</Row>';
-
-// Write data rows
-for ($i = 1; $i < count($data); $i++) {
-    echo '<Row>';
-    foreach ($data[$i] as $cell) {
-        echo '<Cell><Data ss:Type="String">' . htmlspecialchars($cell) . '</Data></Cell>';
-    }
-    echo '</Row>';
-}
-
-// Close tags
-echo '</Table>';
-echo '</Worksheet>';
-
-
-
-
-
 
 echo '</Workbook>';
