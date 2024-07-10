@@ -9,15 +9,26 @@ use Contao\System;
 use Contao\Backend;
 use Contao\Input;
 
-
-//use App\EventListener\DataContainer\SortlyFunctions;
-//use App\EventListener\DataContainer\MyFunctions;
-//use App\EventListener\DataContainer\MailFunctions;
-
-
-
 class SortlyFunctions
 {
+    
+        public function sortlyId()
+    {
+        $db = Database::getInstance();
+        //\System::log('The e-mail was sent successfully', __METHOD__, TL_GENERAL);
+        $value = array();        
+        $result = $db->prepare("SELECT DISTINCT sortlyId, name FROM sortly WHERE pid IN(58670984,72430051) ORDER BY sortlyId")
+                                 ->execute();
+        while($result->next())
+        {
+                $value[$result->sortlyId] = $result->sortlyId." - ".$result->name;
+        }
+        
+//        var_dump($value);
+//        die();
+        
+        return $value;
+    }
     
     public function averagePrice(){
         

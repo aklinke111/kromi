@@ -12,7 +12,7 @@ if (isset($_GET['webhookFunction'])) {
 
     $function = $_GET['webhookFunction'];
     
-    if($function == "calculateQuantityIVM"){
+    if($function == "calculateIVM"){
         echo clearQuantity($db);
         echo "<p>";  
 

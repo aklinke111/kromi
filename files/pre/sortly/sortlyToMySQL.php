@@ -79,33 +79,36 @@ function dataFromSortlyAPI(){
         $sortlyId = $item['sid'];
         $type = $item['type']; 
 
-        $packageUnit = "";
-        $supplierArticleNo = "";
-        $ean = "";
-        $supplier = "";
-        $serialNo = "";
-        $inventoryNo = "";  
-        $kromiArticleNo = "";
-        $DGUV3No = "";
-        $storageLocation = "";
+        // custom attributes - receive from Sortly API by https://api.sortly.co/api/v1/custom_fields?per_page=100&page=1
+        $supplierArticleNo = ""; // 286283
+        $supplier = ""; // 286300       
+        $kromiArticleNo = ""; // 286415
+        $storageLocation = ""; // 286416
+        $packageUnit = ""; // 286667     
+        $discontinued = ""; // 286785
+        $ean = ""; // 287616       
+        $inventoryNo = "";  // 287983
+        $technicalSpecification = ""; //291474
+        $CEdeclaration = ""; // 293437
+        $reserved = ""; // 316079       
+        $DGUV3 = ""; // 316329       
+        $active = ""; // 317639
+        $built = "";  // 320033 
+        $overhaul= ""; // 320034
+        $available = ""; //320035      
+        $IVM = ""; // 322290   
+        $fieldbus = ""; // 322300
+        $serialNo = ""; // 322311
+         $DGUV3No = ""; // 322428
+        $criticalSourcing = ""; // 322429    
+        $raw = ""; // 322605        
+        $partgroup = ""; // 327551
+        $EOL = ""; // 328273
+        $MTTF = ""; // 328274
+        $SortlyLabel = ""; // 328275       
 
-        $technicalSpecification = "";
-        $CEdeclaration = "";
 
-        $DGUV3 = "";            
-        $built = "";  
-        $overhaul= "";
-
-        $reserved = "";
-        $discontinued = "";
-        $active = "";
-        $available = "";
-        $IVM = "";
-        $criticalSourcing = "";
-
-        $fieldbus = ""; 
-        $raw = ""; 
-        
+        // Photos
         $photoName = "";
         $photoUrl = "";
         $tagNames = "";
@@ -133,100 +136,110 @@ function dataFromSortlyAPI(){
 
             // Check all attribute name and extract values
             switch ($custom_attribute_name) {
-                case "packageUnit":
-                        $packageUnit = $attribute['value'];
-                    $msg.=' '.$packageUnit;
-                  break;
                 case "supplierArticleNo":
                         $supplierArticleNo = $attribute['value'];
                     $msg.=' '.$supplierArticleNo;
                   break;
-                case "ean":
-                        $ean = $attribute['value'];
-                    $msg.=' '.$ean;
-                  break;
                 case "supplier":
                         $supplier = $attribute['value'];
                     $msg.=' '.$supplier;
-                  break;
-                case "serialNo":
-                        $serialNo = $attribute['value'];
-                    $msg.=' '.$serialNo;
+                  break;  
+                case "KromiArticleNo":
+                        $kromiArticleNo = $attribute['value'];
+                    $msg.=' '.$kromiArticleNo;
+                  break;   
+                case "storageLocation":
+                        $storageLocation = $attribute['value'];
+                    $msg.=' '.$storageLocation;
+                  break;              
+                case "packageUnit":
+                        $packageUnit = $attribute['value'];
+                    $msg.=' '.$packageUnit;
+                  break;  
+                case "discontinued":
+                        $discontinued = $attribute['value'];
+                    $msg.=' '.$discontinued;
+                  break;              
+                case "ean":
+                        $ean = $attribute['value'];
+                    $msg.=' '.$ean;
                   break;
                 case "inventoryNo":
                         $inventoryNo = $attribute['value'];
                     $msg.=' '.$inventoryNo;
                   break;
-                case "KromiArticleNo":
-                        $kromiArticleNo = $attribute['value'];
-                    $msg.=' '.$kromiArticleNo;
+                case "technicalSpecification":
+                        $technicalSpecification = $attribute['value'];
+                    $msg.=' '.$technicalSpecification;
+                  break;  
+                case "CE declaration":
+                        $CEdeclaration = $attribute['value'];
+                    $msg.=' '.$CEdeclaration;
+                  break; 
+                case "reserved":
+                        $reserved = $attribute['value'];
+                    $msg.=' '.$reserved;
+                  break; 
+              case "DGUV3":
+                        $DGUV3 = $attribute['value'];
+                    $msg.=' '.$DGUV3;
+                  break;                
+                case "active":
+                        $active= intval($attribute['value']);
+                    $msg.=' '.$active;
+                  break; 
+                case "built":
+                        $built = $attribute['value'];
+                    $msg.=' '.$built;
+                  break;  
+                case "overhaul":
+                        $overhaul = $attribute['value'];
+                    $msg.=' '.$overhaul;
+                  break;  
+                case "available":
+                        $available= $attribute['value'];
+                    $msg.=' '.$available;
+                  break;   
+                case "IVM":
+                        $IVM = $attribute['value'];
+                    $msg.=' '.$IVM;
+                  break;  
+                case "fieldbus":
+                        $fieldbus= $attribute['value'];
+                    $msg.=' '.$fieldbus;
+                  break;               
+                  case "serialNo":
+                        $serialNo = $attribute['value'];
+                    $msg.=' '.$serialNo;
                   break;
                 case "DGUV3No":
                         $DGUV3No = $attribute['value'];
                     $msg.=' '.$DGUV3No;
                   break;  
-                case "storageLocation":
-                        $storageLocation = $attribute['value'];
-                    $msg.=' '.$storageLocation;
-                  break;
-
-
-                case "technicalSpecification":
-                        $technicalSpecification = $attribute['value'];
-                    $msg.=' '.$technicalSpecification;
-                  break;
-                case "CE declaration":
-                        $CEdeclaration = $attribute['value'];
-                    $msg.=' '.$CEdeclaration;
-                  break;
-
-                case "DGUV3":
-                        $DGUV3 = $attribute['value'];
-                    $msg.=' '.$DGUV3;
-                  break;  
-                case "built":
-                        $built = $attribute['value'];
-                    $msg.=' '.$built;
-                  break;
-                case "overhaul":
-                        $overhaul = $attribute['value'];
-                    $msg.=' '.$overhaul;
-                  break;
-
-
-                case "reserved":
-                        $reserved = $attribute['value'];
-                    $msg.=' '.$reserved;
-                  break;
-                case "discontinued":
-                        $discontinued = $attribute['value'];
-                    $msg.=' '.$discontinued;
-                  break;
-                case "active":
-                        $active= intval($attribute['value']);
-                    $msg.=' '.$active;
-                  break; 
-                case "available":
-                        $available= $attribute['value'];
-                    $msg.=' '.$available;
-                  break; 
-                case "IVM":
-                        $IVM = $attribute['value'];
-                    $msg.=' '.$IVM;
-                  break;
                 case "criticalSourcing":
                         $criticalSourcing = $attribute['value'];
                     $msg.=' '.$criticalSourcing;
                   break;
-
-                case "fieldbus":
-                        $fieldbus= $attribute['value'];
-                    $msg.=' '.$fieldbus;
-                  break; 
                 case "raw":
                         $raw= $attribute['value'];
                     $msg.=' '.$raw;
                   break; 
+                  case "partgroup":
+                        $partgroup = $attribute['value'];
+                    $msg.=' '.$partgroup;
+                  break;
+                case "EOL":
+                        $EOL = $attribute['value'];
+                    $msg.=' '.$EOL;
+                  break;  
+                case "MTTF":
+                        $MTTF = $attribute['value'];
+                    $msg.=' '.$MTTF;
+                  break;
+                case "SortlyLabel":
+                        $SortlyLabel= $attribute['value'];
+                    $msg.=' '.$SortlyLabel;
+                  break;               
 
                 default:
             }  
@@ -282,30 +295,33 @@ function dataFromSortlyAPI(){
                     notes,
                     type,
 
-                    packageUnit,
                     supplierArticleNo,
-                    ean,
-                    supplier,
-                    serialNo,
-                    inventoryNo,    
+                    supplier,  
                     kromiArticleNo,
-                    DGUV3No,
                     storageLocation,
+                    packageUnit,   
+                    discontinued,
+                    ean,
+                    inventoryNo,
                     technicalSpecification,
-
                     CEdeclaration,
-                    DGUV3,
+                    reserved,
+                    DGUV3,  
+                    active,
                     built,
                     overhaul,
-                    reserved,
-                    discontinued,
-                    active,
-                    available,
-                    IVM,
-                    criticalSourcing,
-
+                    available,   
+                    IVM, 
                     fieldbus,
-                    raw,
+                    serialNo,
+                    DGUV3No,
+                    criticalSourcing,  
+                    raw,      
+                    partgroup,
+                    EOL,
+                    MTTF,
+                    sortlyLabel, 
+
                     photoName,
                     photoUrl,
                     tags
@@ -315,11 +331,11 @@ function dataFromSortlyAPI(){
                     ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
                     ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 
                     ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                    ?, ?, ?, ?, ?
+                    ?, ?, ?, ?, ?, ?, ?, ?, ?
                     )";
 
         $stmt = $db->prepare($sql);
-        $parameterTypes = "issssdiissssssssssssssssiiiiiisisss";
+        $parameterTypes = "issssdiissssssssssssssssiiiiiisisssssii";
         $stmt->bind_param($parameterTypes,
 
             time(),
@@ -333,30 +349,33 @@ function dataFromSortlyAPI(){
             $notes,
             $type,
 
-            $packageUnit,
             $supplierArticleNo,
-            $ean,
-            $supplier,
-            $serialNo,
-            $inventoryNo,
+            $supplier,  
             $kromiArticleNo,
-            $DGUV3No,
             $storageLocation,
-            $technicalSpecification,
-                
-            $CEdeclaration,
-            $DGUV3,   
-            $built,
-            $overhaul, 
-            $reserved,                        
+            $packageUnit,   
             $discontinued,
+            $ean,
+            $inventoryNo,
+            $technicalSpecification,
+            $CEdeclaration,
+            $reserved,
+            $DGUV3,  
             $active,
-            $available,
-            $IVM,  
-            $criticalSourcing,
-
-            $fieldbus, 
-            $raw,
+            $built,
+            $overhaul,
+            $available,   
+            $IVM, 
+            $fieldbus,
+            $serialNo,
+             $DGUV3No,
+            $criticalSourcing,  
+            $raw,      
+            $partgroup,
+            $EOL,
+            $MTTF,
+            $SortlyLabel, 
+                
             $photoName,
             $photoUrl,
             $tagNames 

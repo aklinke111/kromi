@@ -9,6 +9,12 @@ $GLOBALS['TL_LANG']['MOD']['heliotronicCategory'] = 'Categories';
 // income
 $GLOBALS['TL_LANG']['MOD']['payments'] = 'Payments';
 
+// costs
+$GLOBALS['TL_LANG']['MOD']['costTravel'] = 'Travel';
+$GLOBALS['TL_LANG']['MOD']['costFreight'] = 'Travel Category';
+$GLOBALS['TL_LANG']['MOD']['costDguv'] = 'DGUV3';
+$GLOBALS['TL_LANG']['MOD']['costFreight'] = 'Freight';
+
 // Enrichment
 $GLOBALS['TL_LANG']['MOD']['supplier'] = 'Suppliers';
 $GLOBALS['TL_LANG']['MOD']['customer'] = 'Customers +';

@@ -1,5 +1,5 @@
 <?php
-// contao/dca/tl_orders.php
+// contao/dca/tl_delivery.php
 use Contao\DC_Table;
 use Contao\Backend;
 use Contao\Database;
@@ -7,15 +7,13 @@ use Contao\Input;
 
 use App\EventListener\DataContainer\SortlyFunctions;
 use App\EventListener\DataContainer\UpdateSortly;
+use App\EventListener\DataContainer\MyFunctions;
+use App\EventListener\DataContainer\MailFunctions;
 
-
-$GLOBALS['TL_DCA']['tl_orders'] = [
+$GLOBALS['TL_DCA']['tl_delivery'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
         'enableVersioning' => true,
-        'onsubmit_callback' => [
-            [UpdateSortly::class, 'updatePrice']
-        ],        
         'switchToEdit' => true,
         'sql' => [
             'keys' => [
@@ -27,12 +25,12 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
     'list' => [
         'sorting' => [
             'mode' => 1,
-            'fields' => ['supplierId'],
+            'fields' => ['customerId'],
             'flag' => 11,
             'panelLayout' => 'search,limit,sort'
         ],
         'label' => [
-            'fields' => ['supplierId','sortlyId','supplierArticleNo','orderQuantity', 'price','orderDate', 'invoiceDate', 'delivered', 'note'],
+            'fields' => ['customerId','sortlyId','deliveryQuantity', 'price','orderDate', 'invoiceDate', 'delivered', 'note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -56,17 +54,17 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
         'id' => [
             'sql' => ['type' => 'integer', 'unsigned' => true, 'autoincrement' => true],
         ],
-        'supplierId' => [
-            'inputType'               => 'select',
-            'filter'                  => true,
-            'search'                  => true,           
-            'foreignKey'              => 'tl_supplier.name',
-            'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),            
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
-        ],
         'tstamp' => [
             'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
         ],
+        'customerId' => [
+            'inputType'               => 'select',
+            'filter'                  => true,
+            'search'                  => true,           
+            'foreignKey'              => 'tl_customer.name',
+            'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),            
+            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
+        ],        
         'sortlyId' => [
             'inputType' => 'select',
             'filter'                  => true,
@@ -78,21 +76,14 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'eval' => ['tl_class' => 'w50 wizard', 'enabled' => false],
             'sql' => ['type' => 'string', 'length' => 20, 'default' => '']
         ],
-        'supplierArticleNo' => [
-            'search' => true,
-            'sorting' => true,
+        'deliveryQuantity' => [
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50 wizard', 'maxlength' => 100],
-            'sql' => ['type' => 'string', 'length' => 100, 'default' => '']
-        ],
-        'orderQuantity' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'mandatory' => true],
+            'eval' => ['tl_class' => 'w50', 'mandatory' => true],
             'sql' => ['type' => 'integer', 'notnull' => false, 'unsigned' => true],
         ],
         'packageUnit' => [
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'mandatory' => true],
+            'eval' => ['tl_class' => 'w50', 'mandatory' => true],
             'sql' => ['type' => 'integer', 'notnull' => false, 'unsigned' => true, 'default' => '1'],
         ],
         'orderDate' => [
@@ -117,15 +108,9 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'inputType' => 'text',
             'search' => true,
             'sorting' => true,  
-            'eval' => ['tl_class' => 'w25', 'mandatory' => true],
+            'eval' => ['tl_class' => 'w50', 'mandatory' => true],
             'sql' => "DECIMAL(10,4)",
         ],
-        'priceUpdate' => [
-            'search' => true,
-            'sorting' => true,  
-            'inputType' => 'checkbox',
-            'sql' => ['type' => 'boolean','default' => true]
-        ],          
         'discount' => [
             'inputType' => 'text',
             'search' => true,
@@ -133,39 +118,12 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'eval' => ['tl_class' => 'w50', 'mandatory' => false],
             'sql' => "DECIMAL(10,4)",
         ],
-        'surcharge' => [
-            'inputType' => 'text',
-            'search' => true,
-            'sorting' => true,  
-            'eval' => ['tl_class' => 'w50', 'mandatory' => false],
-            'sql' => "DECIMAL(10,4)",
-        ],        
-        'internalExternal' => array
-        (
-            'label'     => &$GLOBALS['TL_LANG']['tl_orders']['internalExternal'],
-            'inputType' => 'radio',
-            'options'   => array('internal', 'external'),
-            'eval'      => array('mandatory'=>true, 'tl_class'=>'w50'),
-            'sql'       => "varchar(32) NOT NULL default 'external'"
-        ),
         'delivered' => [
             'search' => true,
             'sorting' => true,  
             'inputType' => 'checkbox',
             'sql' => ['type' => 'boolean','default' => false]
         ],
-        'calculated' => [
-            'search' => true,
-            'sorting' => true,  
-            'inputType' => 'checkbox',
-            'sql' => ['type' => 'boolean','default' => true]
-        ],
-        'vatIncluded' => [
-            'search' => true,
-            'sorting' => true,  
-            'inputType' => 'checkbox',
-            'sql' => ['type' => 'boolean','default' => false]
-        ],  
         'note' => [
             'inputType' => 'textarea',
             'eval' => ['tl_class' => 'clr', 'rte' => 'tinyMCE', 'mandatory' => false],
@@ -173,6 +131,6 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{article_legend},sortlyId;{suppliers_legend},supplierId,supplierArticleNo;{orders_legend};orderQuantity,packageUnit,price;discount,surcharge;orderDate,invoiceDate;invoiceNoDMS;{delivery_legend},internalExternal;calculated,vatIncluded,priceUpdate,delivered;{note_legend:hide},note'
+        'default' => '{article_legend},sortlyId;{suppliers_legend},customerId;{orders_legend};deliveryQuantity,packageUnit,price,discount;orderDate,invoiceDate;{delivery_legend},invoiceNoDMS, delivered;{note_legend:hide},note'
     ],
 ];

@@ -2,7 +2,7 @@
 // Define global parameters and specs
 use Contao\DC_Table;
 
-$GLOBALS['TL_DCA']['tl_aGlobals'] = [
+$GLOBALS['TL_DCA']['tl_Globals'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
         'enableVersioning' => true,
@@ -69,7 +69,6 @@ $GLOBALS['TL_DCA']['tl_aGlobals'] = [
                 'inputType'               => 'select',
                 'filter'                  => true,
                 'search'                  => true,
-                //'options_callback'        => array('tl_hel_toolcentersPlus', 'ktcId'),                      
                 'foreignKey'              => "tl_hel_category.category",                                          
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'string', 'length' => 3, 'default' => '']

@@ -4,6 +4,9 @@ use Contao\DataContainer;
 use Contao\DC_Table;
 use Contao\Backend;
 
+use App\EventListener\DataContainer\MyFunctions;
+use App\EventListener\DataContainer\SortlyFunctions;
+
 $GLOBALS['TL_DCA']['tl_toolcenterProjects'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
@@ -54,10 +57,10 @@ $GLOBALS['TL_DCA']['tl_toolcenterProjects'] = [
             'filter'  => true,
             'search'  => true,
             'sorting' => true,              
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'autoincrement' => true],
+            'sql' => ['type' => 'integer', 'unsigned' => true, 'autoincrement' => true]
         ],
         'tstamp' => [
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
+            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0],
         ],
         'projectDatePlanned' => [
             'inputType' => 'text',
@@ -74,8 +77,11 @@ $GLOBALS['TL_DCA']['tl_toolcenterProjects'] = [
                 'inputType'               => 'select',
                 'filter'                  => true,
                 'search'                  => true,
-                'sorting'                 => true,            
-                'options_callback'        => array('tl_toolcenterProjects', 'ktcId'),                      
+                'sorting'                 => true,  
+                'options_callback' => [
+                    MyFunctions::class, 'ktcId'
+                ],              
+//                'options_callback'        => array('tl_toolcenterProjects', 'ktcId'),                      
 //                'foreignKey'              => "sortly_ktc.name",                                          
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
@@ -110,6 +116,20 @@ $GLOBALS['TL_DCA']['tl_toolcenterProjects'] = [
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
         ),
+        'probability' => [
+            'inputType' => 'text',
+            'search' => true,
+            'sorting' => true,  
+            'eval' => ['tl_class' => 'w50', 'mandatory' => false],
+            'sql' => "DECIMAL(5,2)",
+        ],
+        'travelExpense' => [
+            'inputType' => 'text',
+            'search' => true,
+            'sorting' => true,  
+            'eval' => ['tl_class' => 'w50', 'mandatory' => false],
+            'sql' => "DECIMAL(10,4)",
+        ],      
         'singleSRC' => [
             'inputType' => 'fileTree',
             'eval' => [
@@ -128,36 +148,36 @@ $GLOBALS['TL_DCA']['tl_toolcenterProjects'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{toolcenterProjects_legend},ktcId,employeeResponsible;projectCategory,projectStatus,projectDatePlanned,projectDateFinished,singleSRC,note'
+        'default' => '{toolcenterProjects_legend},ktcId,employeeResponsible;projectCategory,projectStatus,projectDatePlanned,projectDateFinished;travelExpense,probability,singleSRC,note'
     ],
 ];
 
 
 
-class tl_toolcenterProjects extends Backend
-{
-    public function ktcId()
-    {
-        //\System::log('The e-mail was sent successfully', __METHOD__, TL_GENERAL);
-        $value = array();   
-//        $sql = "SELECT DISTINCT id, sid, name FROM sortly_ktc WHERE name LIKE 'KTC-%' ORDER BY name";
-        
-        $sql = "Select
-                    sortly_ktc.name As ktc,
-                    sortly_customer.name As customer
-                From
-                    sortly_customer Inner Join
-                    sortly_ktc On sortly_customer.sid = sortly_ktc.pid
-                Where
-                    sortly_ktc.name Like 'KTC-%'
-                Order By
-                    ktc";
-        
-        $result = $this->Database->prepare($sql)->execute();
-            while($result->next())
-            {
-                $value[$result->ktc] = $result->ktc.' - '.$result->customer;
-            }
-        return $value;
-    }
-}
+//class tl_toolcenterProjects extends Backend
+//{
+//    public function ktcId()
+//    {
+//        //\System::log('The e-mail was sent successfully', __METHOD__, TL_GENERAL);
+//        $value = array();   
+////        $sql = "SELECT DISTINCT id, sid, name FROM sortly_ktc WHERE name LIKE 'KTC-%' ORDER BY name";
+//        
+//        $sql = "Select
+//                    sortly_ktc.name As ktc,
+//                    sortly_customer.name As customer
+//                From
+//                    sortly_customer Inner Join
+//                    sortly_ktc On sortly_customer.sid = sortly_ktc.pid
+//                Where
+//                    sortly_ktc.name Like 'KTC-%'
+//                Order By
+//                    ktc";
+//        
+//        $result = $this->Database->prepare($sql)->execute();
+//            while($result->next())
+//            {
+//                $value[$result->ktc] = $result->ktc.' - '.$result->customer;
+//            }
+//        return $value;
+//    }
+//}

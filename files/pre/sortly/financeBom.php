@@ -5,15 +5,14 @@
 //include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/sortly/ivmPartsBom_HTML.php";
 
-
 if (isset($_GET['webhookFunction'])) {
 
     $function = $_GET['webhookFunction'];
     
     if($function == "financeBom"){
+        
         //Update prices in tl_sortlyTemplatesIVM
         ivmBomDisplayAndUpdate($db);
-        
         // build excel file
         ivmBom($db);
     }
@@ -21,7 +20,6 @@ if (isset($_GET['webhookFunction'])) {
 
 function ivmBom($db){
 // parameters ----------
-
     // period
     $dateStart = "2024-01-01";
     $dateEnd = "2024-06-30";
@@ -36,7 +34,6 @@ function ivmBom($db){
 // ------------------------------    
     // initialize workbook
     $excelContent = workbookInit();
-    
     // fetch content
     $excelContent .= fetchBOM($db);
     $excelContent .= fetchRawIVM($db);
@@ -44,11 +41,14 @@ function ivmBom($db){
     
     // close workbook
      $excelContent .= '</Workbook>';
-
-    // Save the content to a temporary file
+     
+//   $excelContent .= '<p>';
+//   var_dump($excelContent);
+    
+    // Save the content to a file
     file_put_contents($file, $excelContent);
-}
 
+}
 
 function workbookInit(){
     

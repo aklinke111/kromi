@@ -119,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form-container">
         <h2>Choose an Option</h2>
         <div class="button-container">
-            <button onclick="submitForm('calculateQuantityIVM')">
+            <button onclick="submitForm('calculateIVM')">
                 <i class="fas fa-exclamation-circle button-icon"></i>
                 <span>Calculate Quantities of IVMs</span>
             </button>

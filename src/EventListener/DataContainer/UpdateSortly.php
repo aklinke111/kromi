@@ -12,7 +12,7 @@ use Contao\Input;
 class UpdateSortly 
 {
     public function updatePrice(DataContainer $dc){
-        
+//        echo "a";
         $text = "";   
         $db = Database::getInstance();
         $sortlyUrlPrefix = 'https://api.sortly.co/api/v1/items/'; 

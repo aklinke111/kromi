@@ -18,12 +18,21 @@ $GLOBALS['BE_MOD']['income']['customerPayments'] = [
 ];
 
 
-$GLOBALS['BE_MOD']['expenses']['kromiExpenses'] = [
-    'tables' => ['tl_invoices'],
+
+$GLOBALS['BE_MOD']['expenses']['costTravel'] = [
+    'tables' => ['tl_costTravel'],
 ];
-$GLOBALS['BE_MOD']['expenses']['kromiExpensesCategory'] = [
-    'tables' => ['tl_paymentCategory'],
+$GLOBALS['BE_MOD']['expenses']['tcostTravelCategory'] = [
+    'tables' => ['tl_costTravelCategory'],
 ];
+$GLOBALS['BE_MOD']['expenses']['costDguv'] = [
+    'tables' => ['tl_costDguv'],
+];
+$GLOBALS['BE_MOD']['expenses']['costFreight'] = [
+    'tables' => ['tl_costFreight'],
+];
+
+
 
 
 $GLOBALS['BE_MOD']['enrichment']['customer'] = [
@@ -72,6 +81,9 @@ $GLOBALS['BE_MOD']['inventory']['ToolcenterInventory'] = [
 $GLOBALS['BE_MOD']['engineering']['orders'] = [
     'tables' => ['tl_orders'],
 ];
+$GLOBALS['BE_MOD']['engineering']['delivery'] = [
+    'tables' => ['tl_delivery'],
+];
 $GLOBALS['BE_MOD']['engineering']['bom'] = [
     'tables' => ['tl_sortlyTemplatesIVM', 'tl_bom'],
 ];
@@ -90,9 +102,9 @@ $GLOBALS['BE_MOD']['misc.']['errorCategory'] = array
 (
 	'tables' => array('tl_errorCategory')
 );
-$GLOBALS['BE_MOD']['misc.']['aGlobals'] = array
+$GLOBALS['BE_MOD']['misc.']['Globals'] = array
 (
-	'tables' => array('tl_aGlobals')
+	'tables' => array('tl_Globals')
 );
 
 

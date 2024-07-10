@@ -16,12 +16,12 @@ $GLOBALS['TL_DCA']['tl_customer'] = [
     'list' => [
         'sorting' => [
             'mode' => 1,
-            'fields' => ['customer'],
+            'fields' => ['name'],
             'flag' => 1,
             'panelLayout' => 'search,limit,sort'
         ],
         'label' => [
-            'fields' => ['customer','customerNo','sid','city','street','active'],
+            'fields' => ['name','customerNo','sid','city','street','active'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -55,7 +55,7 @@ $GLOBALS['TL_DCA']['tl_customer'] = [
             'eval' => ['tl_class' => 'w50', 'maxlength' => 10],
             'sql' => ['type' => 'string', 'length' => 10,'default' => '']
         ],        
-        'customer' => [
+        'name' => [
             'sorting' => true,            
             'search' => true,
             'inputType' => 'text',
@@ -93,17 +93,6 @@ $GLOBALS['TL_DCA']['tl_customer'] = [
             'eval' => ['tl_class' => 'w50', 'maxlength' => 50, 'mandatory' => false],
             'sql' => ['type' => 'string', 'length' => 50, 'default' => '']
         ], 
-//        'subsidiaryId' => array
-//        (
-//                'sorting' => true,
-//                'inputType'               => 'select',
-//                'filter'                  => true,
-//                'search'                  => true,
-//                //'options_callback'        => array('tl_hel_toolcentersPlus', 'ktcId'),                      
-//                'foreignKey'              => "tl_sortly_subsidiary.name",                                          
-//                'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
-//                'sql' => ['type' => 'string', 'length' => 3, 'default' => '']
-//        ), 
         'contact' => [
             'search' => true,
             'inputType' => 'text',
@@ -134,6 +123,6 @@ $GLOBALS['TL_DCA']['tl_customer'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{customer_legend},sid,customer,customerNo;street,houseNo,zipcode,city;contact,email,telephone;active;note'
+        'default' => '{customer_legend},sid,name,customerNo;street,houseNo,zipcode,city;contact,email,telephone;active;note'
     ],
 ];
