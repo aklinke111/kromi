@@ -1,6 +1,7 @@
 <?php
 // contao/dca/tl_hel_.php
 use Contao\DC_Table;
+use App\EventListener\DataContainer\MyFunctions;
 
 $GLOBALS['TL_DCA']['tl_hel_invoices'] = [
     'config' => [
@@ -16,12 +17,12 @@ $GLOBALS['TL_DCA']['tl_hel_invoices'] = [
     'list' => [
         'sorting' => [
             'mode' => 2,
-            'fields' => ['invoiceNo'],
+            'fields' => ['supplierId'],
             'flag' => 8,
             'panelLayout' => 'search,limit,sort'
         ],
         'label' => [
-            'fields' => ['invoiceNo','invoiceDate','payment','totalKTCs','brazilianKTCs','category','note'],
+            'fields' => ['supplierId','invoiceNo','invoiceDate','payment','totalKTCs','brazilianKTCs','categoryId','note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -60,6 +61,14 @@ $GLOBALS['TL_DCA']['tl_hel_invoices'] = [
             'eval' => ['tl_class' => 'w25 wizard', 'maxlength' => 255, 'datepicker' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
         ],
+        'supplierId' => [
+            'inputType'               => 'select',
+            'filter'                  => true,
+            'search'                  => true,           
+            'foreignKey'              => 'tl_supplier.name',
+            'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),            
+            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
+        ],        
         'payment' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'mandatory' => false],
@@ -75,17 +84,22 @@ $GLOBALS['TL_DCA']['tl_hel_invoices'] = [
             'eval' => ['tl_class' => 'w25', 'mandatory' => false],
         'sql' => ['type' => 'integer', 'notnull' => false, 'unsigned' => false],
         ],  
-        'category' => array
+        'categoryId' => array
         (
                 'label'                   => &$GLOBALS['TL_LANG']['tl_hel_category']['category'],
                 'inputType'               => 'select',
                 'filter'                  => true,
                 'search'                  => true,
-                //'options_callback'        => array('tl_hel_toolcentersPlus', 'ktcId'),                      
-                'foreignKey'              => "tl_hel_category.category",                                          
+                'foreignKey'              => 'tl_hel_category.category',                                                        
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
-                'sql' => ['type' => 'string', 'length' => 3, 'default' => '']
-        ),         
+                'sql' => ['type' => 'integer', 'length' => 10, 'default' => 0]
+        ), 
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],        
         'note' => [
             'search' => true,
             'inputType' => 'text',
@@ -94,6 +108,6 @@ $GLOBALS['TL_DCA']['tl_hel_invoices'] = [
         ]
     ],
     'palettes' => [
-        'default' => '{maintenance_legend},invoiceNo,invoiceDate;totalKTCs,brazilianKTCs;category,payment;note'
+        'default' => '{legend},supplierId;invoiceNo,invoiceDate;totalKTCs,brazilianKTCs;categoryId,payment;note'
     ],
 ];

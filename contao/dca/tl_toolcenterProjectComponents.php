@@ -100,6 +100,12 @@ $GLOBALS['TL_DCA']['tl_toolcenterProjectComponents'] = [
             'sql' => "varchar(255) NOT NULL default ''",
             'label_callback' => array('tl_toolcenterProjectComponents', 'modifyTitleLabel'),
         ),
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],        
         'note' => [
             'search' => true,
             'inputType' => 'text',

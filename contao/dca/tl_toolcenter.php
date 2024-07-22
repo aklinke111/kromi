@@ -73,8 +73,8 @@ $GLOBALS['TL_DCA']['tl_toolcenter'] = [
                 'inputType'               => 'select',
                 'filter'                  => true,
                 'search'                  => true,
-                'options_callback'        => array('tl_toolcenter', 'costUnit'),                      
-//                'foreignKey'              => "tl_costUnits.costUnit",                                          
+                'options_callback'        => array('tl_toolcenter', 'costcenter'),                      
+//                'foreignKey'              => "tl_costcenter.costcenter",                                          
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
         ), 
@@ -100,6 +100,12 @@ $GLOBALS['TL_DCA']['tl_toolcenter'] = [
             'search'                  => true,
             'sql' => ['type' => 'boolean','default' => false]
         ],
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],        
         'note' => [
             'inputType' => 'textarea',
             'eval' => ['tl_class' => 'clr', 'mandatory' => false],
@@ -114,15 +120,15 @@ $GLOBALS['TL_DCA']['tl_toolcenter'] = [
 
 class tl_toolcenter extends Backend
 {
-    public function costUnit()
+    public function costcenter()
     {
         //\System::log('The e-mail was sent successfully', __METHOD__, TL_GENERAL);
         $value = array();        
-        $result = $this->Database->prepare("SELECT * FROM tl_costUnits ORDER BY costUnit")
+        $result = $this->Database->prepare("SELECT * FROM tl_costcenter ORDER BY costcenter")
                                  ->execute();
         while($result->next())
         {
-                $value[$result->costUnit] = $result->costUnit." ".$result->description;
+                $value[$result->costcenter] = $result->costcenter." ".$result->description;
         }
         return $value;
     }

@@ -7,7 +7,7 @@ use Contao\Input;
 
 use App\EventListener\DataContainer\SortlyFunctions;
 use App\EventListener\DataContainer\UpdateSortly;
-
+use App\EventListener\DataContainer\MyFunctions;
 
 $GLOBALS['TL_DCA']['tl_orders'] = [
     'config' => [
@@ -26,13 +26,13 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
     ],
     'list' => [
         'sorting' => [
-            'mode' => 1,
+            'mode' => 2,
             'fields' => ['supplierId'],
-            'flag' => 11,
+            'flag' => 8,
             'panelLayout' => 'search,limit,sort'
         ],
         'label' => [
-            'fields' => ['supplierId','sortlyId','supplierArticleNo','orderQuantity', 'price','orderDate', 'invoiceDate', 'delivered', 'note'],
+            'fields' => ['supplierId','sortlyId','invoiceNoDMS','invoiceDate','supplierArticleNo','orderQuantity', 'price','discount','surcharge','vat','orderDate', 'estimatedDeliveryDate', 'delivered', 'note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -59,7 +59,8 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
         'supplierId' => [
             'inputType'               => 'select',
             'filter'                  => true,
-            'search'                  => true,           
+            'search'                  => true, 
+            'sorting'                 => true,            
             'foreignKey'              => 'tl_supplier.name',
             'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),            
             'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
@@ -100,6 +101,11 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'eval' => ['tl_class' => 'w50 wizard', 'maxlength' => 50, 'datepicker' => true],
             'sql' => ['type' => 'string', 'length' => 50, 'default' => '']
         ],
+        'estimatedDeliveryDate' => [
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w50 wizard', 'maxlength' => 50, 'datepicker' => true],
+            'sql' => ['type' => 'string', 'length' => 50, 'default' => '']
+        ],        
         'invoiceDate' => [
             'sorting' => true,
             'inputType' => 'text',
@@ -107,6 +113,7 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'sql' => ['type' => 'string', 'length' => 50, 'default' => '']
         ],
         'invoiceNoDMS' => [
+            'sorting' => true,            
             'inputType' => 'text',
             'search' => true,
             'sorting' => true,            
@@ -131,14 +138,14 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'search' => true,
             'sorting' => true,  
             'eval' => ['tl_class' => 'w50', 'mandatory' => false],
-            'sql' => "DECIMAL(10,4)",
+            'sql'  => "DECIMAL(10,2) NOT NULL default '0.00'"
         ],
         'surcharge' => [
             'inputType' => 'text',
             'search' => true,
             'sorting' => true,  
             'eval' => ['tl_class' => 'w50', 'mandatory' => false],
-            'sql' => "DECIMAL(10,4)",
+            'sql'  => "DECIMAL(10,2) NOT NULL default '0.00'"
         ],        
         'internalExternal' => array
         (
@@ -160,6 +167,12 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'inputType' => 'checkbox',
             'sql' => ['type' => 'boolean','default' => true]
         ],
+        'vat' => [
+            'inputType' => 'radio',
+            'options'   => array('0', '16', '19'),
+            'eval'      => array('mandatory'=>true, 'tl_class'=>'w50'),
+            'sql'       => "varchar(3) NOT NULL default '19'"
+        ], 
         'vatIncluded' => [
             'search' => true,
             'sorting' => true,  
@@ -173,6 +186,6 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{article_legend},sortlyId;{suppliers_legend},supplierId,supplierArticleNo;{orders_legend};orderQuantity,packageUnit,price;discount,surcharge;orderDate,invoiceDate;invoiceNoDMS;{delivery_legend},internalExternal;calculated,vatIncluded,priceUpdate,delivered;{note_legend:hide},note'
+        'default' => '{article_legend},sortlyId;{suppliers_legend},supplierId,supplierArticleNo;{orders_legend};orderQuantity,packageUnit,price;discount,surcharge;orderDate,estimatedDeliveryDate,invoiceDate,invoiceNoDMS;{delivery_legend},internalExternal;calculated,vat,vatIncluded,priceUpdate,delivered;{note_legend:hide},note'
     ],
 ];

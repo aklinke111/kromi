@@ -122,6 +122,12 @@ $GLOBALS['TL_DCA']['tl_bom'] = [
             'eval' => ['tl_class' => 'w50 wizard'],
             'sql' => ['type' => 'boolean','default' => true]
         ],
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],        
         'note' => [
             'search' => true,
             'sorting' => true,

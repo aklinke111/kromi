@@ -141,6 +141,12 @@ $GLOBALS['TL_DCA']['tl_toolcenterProjects'] = [
             ],
             'sql' => ['type' => 'binary', 'length' => 16, 'notnull' => false, 'fixed' => true]
         ],
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],        
         'note' => [
             'inputType' => 'textarea',
             'eval' => ['tl_class' => 'clr', 'mandatory' => false],

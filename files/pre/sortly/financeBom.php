@@ -1,16 +1,19 @@
 <?php
-
 // ---------- ATTENTION - EXCEL SAVE DOESN'T WORK WITH 'ECHO' ------------
-// Load the database configuration file
-//include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/sortly/ivmPartsBom_HTML.php";
+
+include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/sql.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/date.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/calculate.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/sortly/ivmBomDisplayAndUpdate.php";
+
+
 
 if (isset($_GET['webhookFunction'])) {
 
     $function = $_GET['webhookFunction'];
     
     if($function == "financeBom"){
-        
         //Update prices in tl_sortlyTemplatesIVM
         ivmBomDisplayAndUpdate($db);
         // build excel file
@@ -31,13 +34,20 @@ function ivmBom($db){
     $dateprint = date("Y-m-d_H:i");
     $file = $filePath.$filename."_".$dateprint.$fileExtension;
 
-// ------------------------------    
+// ------------------------------   
+//  
     // initialize workbook
     $excelContent = workbookInit();
-    // fetch content
+    
+//     fetch content
     $excelContent .= fetchBOM($db);
     $excelContent .= fetchRawIVM($db);
-    $excelContent .= fetchProducedIVM($db,$dateStart,$dateEnd);    
+    
+    $excelContent .= fetchProducedIVM($db,$dateStart,$dateEnd); 
+    
+    // Forecast for definded period
+    $ForecastPeriod = globalVal($db, 'ForecastPeriod');
+    $excelContent .= forecast($db, $ForecastPeriod); 
     
     // close workbook
      $excelContent .= '</Workbook>';
@@ -47,6 +57,8 @@ function ivmBom($db){
     
     // Save the content to a file
     file_put_contents($file, $excelContent);
+    
+    echo $excelContent;
 
 }
 
@@ -78,7 +90,88 @@ function workbookInit(){
 }
 
 
+
+function forecast($db, $ForecastPeriod){
+    
+    $msg = "";
+    
+    $excelContent = "";
+    $group = "G4_";
+    // open sheet
+    $sheetName = "Forecast $ForecastPeriod months";  
+    $excelContent .= '<Worksheet ss:Name="'.$group.$sheetName.'">';
+    $excelContent .= '<Table>';
+    
+    // Write header row -------------------------
+
+    // query string
+    $sql = buildPivotSql();
+    
+    // extract titles from string of pivot-query
+    $titles = extract_titles_from_sql($sql);
+    
+    // open header row
+    $excelContent .= '<Row>';
+    
+    // insert titles  
+    foreach ($titles as $title) {
+
+        $title = str_replace("'", "", $title);
+//        echo $title. "<br>";
+        $excelContent .= '<Cell><Data ss:Type="String">'.$title.'</Data></Cell>';
+    }
+    
+    // close header row
+    $excelContent .= '</Row>';  
+    
+    // ------------------------------
+
+    // get result from pivot query
+    $result = $db->query($sql);
+    
+    while ($item = $result->fetch_assoc()) {
+        
+        $category = $item['category'];
+        $switchPositiveNegative = (-1);
+        if ($category == 'Pending Orders - internal'){
+            $switchPositiveNegative = (1);
+        }
+        // fetch a data row
+       $excelContent .= '<Row>'; 
+       
+       // run threw each column (title)...
+        foreach ($titles as $title) {
+            $title = str_replace("'", "", $title);
+            
+            $value = $item[$title];
+
+            
+            if(is_numeric($value)){
+                $value = floatval($item[$title]);
+                $value = round($value,2);
+                $value *= $switchPositiveNegative;
+                $value = number_format($value,2); 
+
+            }
+
+            // ... and insert values
+            $excelContent .= '<Cell><Data ss:Type="String">' . htmlspecialchars($value) . '</Data></Cell>';
+        }
+        // close row
+        $excelContent .= '</Row>';   
+    }
+    
+    // Close tags sheet
+    $excelContent .= '</Table>';
+    $excelContent .= '</Worksheet>';
+    
+    return $excelContent;   
+}
+
+
+
 function fetchBOM($db){
+    $excelContent = "";
     $group = "G1_";
     
 //    // empty column price
@@ -137,8 +230,6 @@ function fetchBOM($db){
         while ($row = $result1->fetch_assoc()) {
             $calculate = $row['calculate'];
     //            $price = str_replace(".", ",", $row['price']); 
-            
-            $priceTotal += $item1['price']*$item1['bomQuantity'];
 
             if($calculate){
             
@@ -174,6 +265,7 @@ function fetchBOM($db){
 }
 
 function fetchRawIVM($db){
+    $excelContent = "";
     $group = "G2_";
     // open sheet
     $sheetName = "IVM Raw";  
@@ -242,6 +334,7 @@ function fetchRawIVM($db){
 }
 
 function fetchProducedIVM($db,$dateStart,$dateEnd ){
+    $excelContent = "";
     //Group for better use of sheets
     $group = "G3_";
     // open sheet
@@ -293,7 +386,7 @@ function fetchProducedIVM($db,$dateStart,$dateEnd ){
     
     while ($item = $result->fetch_assoc()) {
         $model = $item['model'];
-        $addState = "";
+        $addFacelift = "";
         // lookup for state
         if (empty($item['overhaul'])){
             $state = "new";

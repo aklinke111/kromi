@@ -100,6 +100,12 @@ $GLOBALS['TL_DCA']['tl_payments'] = [
             ],
             'sql' => ['type' => 'binary', 'length' => 16, 'notnull' => false, 'fixed' => true]
         ],
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],        
         'note' => [
             'search' => true,
             'inputType' => 'text',

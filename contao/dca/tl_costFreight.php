@@ -2,6 +2,9 @@
 // contao/dca/tl_costFreight.php
 use Contao\DC_Table;
 
+use App\EventListener\DataContainer\SortlyFunctions;
+use App\EventListener\DataContainer\UpdateSortly;
+use App\EventListener\DataContainer\MyFunctions;
 $GLOBALS['TL_DCA']['tl_costFreight'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
@@ -21,7 +24,7 @@ $GLOBALS['TL_DCA']['tl_costFreight'] = [
             'panelLayout' => 'search,limit,sort'
         ],
         'label' => [
-            'fields' => ['projectDescription','freightDescription','departure','destination','price','invoiceDate','invoiceNo','delivered','note'],
+            'fields' => ['costcenter','projectDescription','freightDescription','departure','destination','price','invoiceDate','invoiceNo','delivered', 'exclude','note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -76,6 +79,18 @@ $GLOBALS['TL_DCA']['tl_costFreight'] = [
             'eval' => ['tl_class' => 'w50', 'maxlength' => 100, 'mandatory' => false],
             'sql' => ['type' => 'string', 'length' => 100, 'default' => '']
         ], 
+        'costcenter' => array
+        (
+            'sorting' => true,
+            'inputType'               => 'select',
+            'filter'                  => true,
+            'search'                  => true,
+            'options_callback' => [
+                MyFunctions::class, 'costcenter'
+            ],                                         
+            'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
+            'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
+        ),         
         'price' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'mandatory' => false],
@@ -93,6 +108,12 @@ $GLOBALS['TL_DCA']['tl_costFreight'] = [
             'eval' => ['tl_class' => 'w50 wizard', 'maxlength' => 255, 'datepicker' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
         ],  
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],     
         'delivered' => [
             'search' => true,
             'sorting' => true,  
@@ -107,6 +128,6 @@ $GLOBALS['TL_DCA']['tl_costFreight'] = [
         ]
     ],
     'palettes' => [
-        'default' => '{legend},projectDescription,freightDescription;departure,destination;invoiceNo,invoiceDate;price,note;delivered'
+        'default' => '{legend},projectDescription,freightDescription,costcenter;departure,destination;invoiceNo,invoiceDate;price,note;exclude,delivered'
     ],
 ];

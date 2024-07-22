@@ -1,6 +1,6 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functionsMail.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/mail.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
 
 if (isset($_GET['webhookFunction'])) {

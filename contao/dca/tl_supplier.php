@@ -28,7 +28,7 @@ $GLOBALS['TL_DCA']['tl_supplier'] = [
         ],
         'label' => [
 //            'fields' => ['name', 'city', 'country', 'user_id:tl_user.name','critical'],
-            'fields' => ['name', 'postal', 'city', 'street', 'critical'],
+            'fields' => ['name', 'postal', 'city', 'street', 'critical','tmp_infoChangeCorporateForm'],
             'format' => '%s',
             'showColumns' => true,            
         ],
@@ -132,21 +132,21 @@ $GLOBALS['TL_DCA']['tl_supplier'] = [
             'inputType' => 'text',
             'search' => true,
             'sorting' => true,  
-            'eval' => ['tl_class' => 'w50', 'mandatory' => true],
+            'eval' => ['tl_class' => 'w50', 'mandatory' => false],
             'sql' => "DECIMAL(10,4)",
         ],
         'skonto' => [
             'inputType' => 'text',
             'search' => true,
             'sorting' => true,  
-            'eval' => ['tl_class' => 'w50', 'mandatory' => true],
+            'eval' => ['tl_class' => 'w50', 'mandatory' => false],
             'sql' => "DECIMAL(10,4)",
         ],
         'daysToPay' => [
             'inputType' => 'text',
             'search' => true,
             'sorting' => true,  
-            'eval' => ['tl_class' => 'w50', 'mandatory' => true],
+            'eval' => ['tl_class' => 'w50', 'mandatory' => false],
             'sql' => "DECIMAL(10,4)",
         ],
         'critical' => [
@@ -157,11 +157,25 @@ $GLOBALS['TL_DCA']['tl_supplier'] = [
             'eval' => ['tl_class' => 'w50'],
             'sql' => ['type' => 'boolean','default' => false]
         ],
+        'tmp_infoChangeCorporateForm' => [
+            'inputType' => 'checkbox',
+            'search' => true,            
+            'filter' => true,
+            'sorting' => true,
+            'eval' => ['tl_class' => 'w50'],
+            'sql' => ['type' => 'boolean','default' => false]
+        ],                    
         'criticalNote' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => false],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
-        ],                   
+        ], 
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],                    
         'note' => [
             'inputType' => 'textarea',
             'eval' => ['tl_class' => 'clr', 'rte' => 'tinyMCE', 'mandatory' => false],
@@ -170,6 +184,6 @@ $GLOBALS['TL_DCA']['tl_supplier'] = [
     ],
                     
     'palettes' => [
-        'default' => '{vendor_legend},name;{address_legend},street,postal,city,country,addressInfo,url;{contact_legend},contactName,contactPosition,contactMail,contactPhone;{additional_legend},customerNo,account,critical,criticalNote;discount,skonto,daysToPay;note'
+        'default' => '{vendor_legend},name;{address_legend},street,postal,city,country,addressInfo,url;{contact_legend},contactName,contactPosition,contactMail,contactPhone;{additional_legend},customerNo,account,critical,criticalNote;discount,skonto,daysToPay;tmp_infoChangeCorporateForm;note'
     ],
 ];

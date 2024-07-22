@@ -5,6 +5,8 @@
 //
 // Load the database configuration file
 include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/sql.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/calculate.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/sortly/updateSortly.php";
 
 // main function for calculating quantites of IVM and update table tl_sortlyTemplatesIVM
@@ -15,7 +17,13 @@ if (isset($_GET['webhookFunction'])) {
     if($function == "calculateIVM"){
         echo clearQuantity($db);
         echo "<p>";  
-
+        
+        echo quantityForecastDeinstallations($db);
+        echo "<p>";  
+        echo calculateQuantityOrdered($db);
+        echo "<p>";          
+        echo quantityForecastImplementations($db);
+        echo "<p>";          
         echo calculateQuantityIvmProjectsReturn($db);
         echo "<p>";    
         echo calculateQuantityIvmProjects($db);
@@ -25,12 +33,48 @@ if (isset($_GET['webhookFunction'])) {
         echo calculateInaktiveIvmOnStock($db);
         echo "<p>";  
         echo calculateRawIvmOnStock($db);
+        echo "<p>";  
         
         echo calculateTotalNeededQuantity($db);
-        echo "<p>";   
+        echo "<p>";  
+        
         
     }
 }
+
+
+
+function lookupGlobals($db){
+    $msg = "";
+    
+    // lookup ForecastPeriod
+    $ForecastPeriod = globalVal($db, 'ForecastPeriod');
+    $msg .= "Forecast period: $ForecastPeriod months<br>";
+    
+       // lookup DGUV3 period
+    $DGUV3_Period = globalVal($db, 'DGUV3_Period');
+    $msg .= "Period between DGUV3 checks: ".$DGUV3_Period."<br>";
+    
+    // 
+    // lookup for pice per each IVM checked e.g. => 80.00€
+    $DGUV3_PricePerIVM = globalVal($db, 'DGUV3_PricePerIVM');
+    $msg .= "Price per checked IVM DGUV3: ".$DGUV3_PricePerIVM."<br>";
+    
+    // lookup for pice per each approach e.g. => 79.00€
+    $DGUV3_PricePerApproach = globalVal($db, 'DGUV3_PricePerApproach');
+    $msg .= "DGUV3 price per approach: ".$DGUV3_PricePerApproach."<br>";
+    
+    // lookup period of passed IVM installations 
+    $Period_Passed_Installations = globalVal($db, 'Period_Passed_Installations');
+    $msg .= "Period in months for considering German installations. ".$Period_Passed_Installations."<br>"; 
+    
+    $msg .=  "<p>";
+    
+    return $msg;
+}
+
+
+
 
 function clearQuantity($db){
    $sql = "UPDATE tl_sortlyTemplatesIVM SET
@@ -39,48 +83,155 @@ function clearQuantity($db){
             quantityProjects = 0,
             quantityAvailable = 0, 
             quantityReturn = 0, 
-            quantityOrdered = 0, 
+            quantityOrderedExternal = 0, 
+            quantityOrderedInternal = 0,             
             quantityOverAll = 0, 
-            quantityOverhaul = 0";
+            quantityForecastDeinstallations = 0,
+            quantityForecastInstallations = 0,
+            quatityScrapped = 0,
+            quantityOverhaul = 0,
+            remainingValue = 0,            
+            priceHr = 0 ";
    
    if ($result = $db->query($sql)){
-       return "cleared quantity columns in table 'tl_sortlyTemplatesIVM'"; 
+       return "cleared quantity and price columns in table 'tl_sortlyTemplatesIVM'"; 
     }
 }
 
 
-// sum of all qautity columns
+
+function quantityForecastDeinstallations($db){
+    
+    // lookup period of passed IVM deinstallations 
+    $Period_Passed_Deinstallations = globalVal($db, 'Period_Passed_Deinstallations');
+    $ForecastPeriod = globalVal($db, 'ForecastPeriod');
+    
+    $msg = "<b>IVMs forecast based on removed/installed devices according installations and changes in projects for a period of $Period_Passed_Deinstallations months </b><p>";
+
+    $sql = "Select
+            tl_sortlyTemplatesIVM.name As model,
+            tl_sortlyTemplatesIVM.id,
+            Count(tl_sortlyTemplatesIVM.id) As quantity
+        From
+            tl_toolcenterProjectCategory Inner Join
+            tl_toolcenterProjects On tl_toolcenterProjectCategory.id = tl_toolcenterProjects.projectCategory Inner Join
+            tl_toolcenterProjectStatus On tl_toolcenterProjectStatus.id = tl_toolcenterProjects.projectStatus Inner Join
+            tl_toolcenterProjectComponents On tl_toolcenterProjects.id = tl_toolcenterProjectComponents.pid Inner Join
+            tl_sortlyTemplatesIVM On tl_sortlyTemplatesIVM.id = tl_toolcenterProjectComponents.componentModel
+        Where
+            tl_toolcenterProjectComponents.`usage` Like 'remove' And
+            tl_toolcenterProjectCategory.category In ('discontinued', 'change configuration') And
+            tl_toolcenterProjects.projectDateFinished BETWEEN CURDATE() - INTERVAL $Period_Passed_Deinstallations MONTH AND CURDATE() and
+            tl_toolcenterProjectStatus.status Like 'done'
+        Group By
+            tl_sortlyTemplatesIVM.name";
+    $result = $db->query($sql);
+    
+    while($item = $result->fetch_assoc()){ 
+        $model = $item['model'];
+        $id = $item['id'];
+        $quantity = $item['quantity'];
+        
+        // factor
+        $factor = $ForecastPeriod / $Period_Passed_Deinstallations;
+        $quantity *= $factor;
+        
+        // Update table
+        $sql = "UPDATE tl_sortlyTemplatesIVM SET quantityForecastDeinstallations = $quantity WHERE id = $id";
+        $result_update = $db->query($sql);
+            
+        $msg.= "$model (ID $id) updated with quantity $quantity total deinstalled over period of $factor * $Period_Passed_Deinstallations months <br/>";
+    } 
+    return $msg;
+}
+
+
+
+function quantityForecastImplementations($db){
+    
+    // lookup period of passed IVM installations 
+    $Period_Passed_Installations = globalVal($db, 'Period_Passed_Installations');
+    $ForecastPeriod = globalVal($db, 'ForecastPeriod');
+    
+    $msg = "<b>IVMs forecast based on installed devices according implementations and changes in projects for a period of $Period_Passed_Installations months:</b><p>";
+    
+
+    
+    $sql = "Select
+            tl_sortlyTemplatesIVM.name As model,
+            tl_sortlyTemplatesIVM.id,
+            Count(tl_sortlyTemplatesIVM.id) As quantity
+        From
+            tl_toolcenterProjectCategory Inner Join
+            tl_toolcenterProjects On tl_toolcenterProjectCategory.id = tl_toolcenterProjects.projectCategory Inner Join
+            tl_toolcenterProjectStatus On tl_toolcenterProjectStatus.id = tl_toolcenterProjects.projectStatus Inner Join
+            tl_toolcenterProjectComponents On tl_toolcenterProjects.id = tl_toolcenterProjectComponents.pid Inner Join
+            tl_sortlyTemplatesIVM On tl_sortlyTemplatesIVM.id = tl_toolcenterProjectComponents.componentModel
+        Where
+            tl_toolcenterProjectComponents.`usage` Like 'install' And
+            tl_toolcenterProjectCategory.category In ('implementation', 'change configuration') And
+            tl_toolcenterProjects.projectDateFinished BETWEEN CURDATE() - INTERVAL $Period_Passed_Installations MONTH AND CURDATE() and
+            tl_toolcenterProjectStatus.status Like 'done'
+        Group By
+            tl_sortlyTemplatesIVM.name";
+    $result = $db->query($sql);
+    while($item = $result->fetch_assoc()){ 
+        $model = $item['model'];
+        $id = $item['id'];
+        $quantity = $item['quantity'];
+        
+        // factor
+        $factor = $ForecastPeriod / $Period_Passed_Installations;
+        $quantity *= $factor;
+        
+        // Update table
+        $sql = "UPDATE tl_sortlyTemplatesIVM SET quantityForecastInstallations = $quantity WHERE id = $id";
+        $result_update = $db->query($sql);
+            
+        $msg.= "$model (ID $id) updated with quantity $quantity total deinstalled over period of $factor * $Period_Passed_Installations months <br/>";
+    } 
+    return $msg;
+}
+
+
+
+
+// sum of all quantity columns
 function calculateTotalNeededQuantity($db){
-    $msg = "";
+
+    $msg = "<b>Calculate needed quantities</b><p>";
+    
     $sql = "Select * FROM tl_sortlyTemplatesIVM";
     $result = $db->query($sql);
     
     while($item = $result->fetch_assoc()){ 
+        
+        
         $id = $item['id'];
-        $sortlyId = $item['sortlyId']; $sortlyId = $item['sortlyId']; 
-        $model = $item['name'];      
+        $sortlyId = $item['sortlyId'];
+        $model = $item['name'];  
+        $quantityExtra = $item['quantityExtra'];
         $quantityRaw = $item['quantityRaw'];
+        $quantityOrderedInternal = $item['quantityOrderedInternal'];        
         $quantityProjects = $item['quantityProjects'];  
         $quantityAvailable = $item['quantityAvailable'];  
         $quantityMinimum = $item['quantityMinimum'];  
-        $quantityForecast = $item['quantityForecast'];
+        $quantityForecastInstallations = $item['quantityForecastInstallations'];
+        $quantityForecastDeinstallations  = $item['quantityForecastDeinstallations'];
         
-        // lookup and update ordered quantity
-        $msg.= lookupQuantityOrderedIVM($db, $sortlyId);
-        
-        // lookup and update quantity over all IVMs
-        
-        // formular to calculate
-        $quantity = 
-            $quantityRaw 
+        // calculate 'tl_sortlyTemplatesIVM.quantity'
+             $quantity = 
+              $quantityExtra
             + $quantityProjects 
             + $quantityMinimum 
-            + $quantityForecast 
-            - $quantityAvailable
-            - $quantityOrdered; 
-        
-        $sql_1 = "UPDATE tl_sortlyTemplatesIVM SET quantity = $quantity WHERE id = $id";
-        if ($result_1 = $db->query($sql_1)){
+            + $quantityForecastInstallations
+            + $quantityOrderedInternal
+            - $quantityForecastDeinstallations 
+            - $quantityAvailable;
+
+        // update relevant quantity over all IVMs
+        $sql= "UPDATE tl_sortlyTemplatesIVM SET quantity = $quantity WHERE id = $id";
+        if ($result_update = $db->query($sql)){
             $msg.= "Field in table 'tl_sortlyTemplatesIVM.quantity' updated successfully for id $id with a total calculated quantity of <b>$quantity pc.</b><br>"; 
         }
         
@@ -92,7 +243,9 @@ function calculateTotalNeededQuantity($db){
 
 
 function lookupQuantityOverAll($db, $model){
+
     $msg = "";
+    
     $sql = "Select COUNT(name) as quantityOverAll from sortly where name LIKE '$model' and name Not Like 'SCRAP'";
     $result = $db->query($sql);
     while($item = $result->fetch_assoc()){ 
@@ -108,9 +261,41 @@ function lookupQuantityOverAll($db, $model){
     return $msg;
 }
 
-function lookupQuantityOrderedIVM($db, $sortlyId){
+
+ function calculateQuantityOrdered($db){
+      // lookup and update ordered quantity
+
+    $msg = "<b>IVMs ordered internally and ecternally:</b><p>";
+    
+    $sql = "Select sortlyId from tl_sortlyTemplatesIVM";
+
+    $result = $db->query($sql);
+    while($item = $result->fetch_assoc()){ 
+        $sortlyId = $item['sortlyId'];
+        
+        $msg .= lookupQuantityOrderedIVM($db, $sortlyId, 'quantityOrderedExternal', 'external');
+        $msg .= lookupQuantityOrderedIVM($db, $sortlyId, 'quantityOrderedInternal', 'internal');  
+        
+    } 
+    return $msg;
+}
+
+
+function lookupQuantityOrderedIVM($db, $sortlyId, $column, $internalExternal){
+
     $msg = "";
-    $sql = "Select SUM(orderQuantity) as quantityOrdered from tl_orders where sortlyId LIKE '$sortlyId'";
+    
+    $ForecastPeriod = globalVal($db, 'ForecastPeriod');
+    
+    $sql = "Select 
+            SUM(orderQuantity) as quantityOrdered 
+        FROM tl_orders 
+        WHERE sortlyId LIKE '$sortlyId' 
+            AND delivered = false 
+            AND calculated = true
+            AND internalExternal = '$internalExternal'
+            AND tl_orders.estimatedDeliveryDate BETWEEN CURDATE() AND CURDATE() + INTERVAL $ForecastPeriod MONTH";
+    
     $result = $db->query($sql);
     while($item = $result->fetch_assoc()){ 
         $quantityOrdered = $item['quantityOrdered'];
@@ -120,19 +305,24 @@ function lookupQuantityOrderedIVM($db, $sortlyId){
             $quantityOrdered = 0;
         }
         
-        $sqlUpdate = "Update tl_sortlyTemplatesIVM SET quantityOrdered = $quantityOrdered where sortlyId LIKE '$sortlyId'";
+        $sqlUpdate = "Update tl_sortlyTemplatesIVM SET $column = $quantityOrdered where sortlyId LIKE '$sortlyId'";
         if($db->query($sqlUpdate)){
-           $msg.= "Field in table 'tl_sortlyTemplatesIVM.quantityOrdered' updated successfully for sortlyID: $sortlyId with a quantity ordered of <b>$quantityOrdered pc.</b><br>"; 
+           $msg.= "Field in table 'tl_sortlyTemplatesIVM.$column' updated successfully for sortlyID: $sortlyId with a quantity ordered $internalExternal of <b>$quantityOrdered pc.</b><br>"; 
         }else{
            $msg.= "Error updating record: " . $db->error . "<br>"; 
         }
     }
     return $msg;
+//    return $quantityOrdered;
 }
+
+
+
 
 function calculateQuantityIvmProjectsReturn($db){
 
     $msg = "<b>IVMs returned from planned projects:</b><p>";
+    
 // Calculating all devices from planned projects & components excluded Brazil--->  SQL in FlySQL  query 'projectComponents'    
     $sql = 
     "Select
@@ -219,16 +409,22 @@ function calculateQuantityIvmProjects($db){
     return $msg;
 }
 
+
+
 function calculateAvailableQuantityIvmOnStock($db){
 
     $msg = "<b>IVMs available on KROMI stock:</b><p>";
-// Calculating all devices on stock   
+    
+    // Calculating all devices on stock   
     $sql = 
     "Select
         tl_sortlyTemplatesIVM.name As model,
+        tl_sortlyTemplatesIVM.note,        
         Count(sortly.IVM) As quantity,
-        tl_sortlyTemplatesIVM.id As id,
-        tl_sortlyTemplatesIVM.note
+        Count(IF(sortly.overhaul <> '', 'overhaul', NULL)) as quantityOverhaul,      
+        tl_sortlyTemplatesIVM.id As id
+
+
     From
         sortly Inner Join
         sortly_ktc On sortly.pid = sortly_ktc.sid Inner Join
@@ -237,26 +433,48 @@ function calculateAvailableQuantityIvmOnStock($db){
         sortly.IVM = 1 And
         sortly_ktc.name Not Like 'SCRAP' And
         sortly_ktc.name Not Like 'KTC-%' And
-        sortly.active = 1
+        sortly.available = 1 And
+        sortly.raw = 0
     Group By
         tl_sortlyTemplatesIVM.name
     ";
-    //        sortly_ktc.name Not Like 'Archive T11' And
     $result = $db->query($sql);
     while($item = $result->fetch_assoc()){ 
-        $model = $item['model'];
-        $note = $item['note'];  
-        $quantity = $item['quantity'];
-        $id = $item['id'];
         
-            // Update table
-            $sql_1 = "UPDATE tl_sortlyTemplatesIVM SET quantityAvailable = $quantity WHERE id = $id";
-            $result_1 = $db->query($sql_1);
+        $id = $item['id'];
+        $model = $item['model'];
+        $quantity = $item['quantity'];
+        $quantityOverhaul = $item['quantityOverhaul'];
+
+        // in Sortly is made no difference between regular Helix or facelifted Helix. We need to adjust this according flag 'overhaul'
+        // if we have en entry there, it is a facelifted device and assigned like that. Change id from 5 to 15 for master and from 2 to 16 for slaves
+
+            // first update the regular devices with quantity minus quantity overhauled. We can subtract because in case there are no overhauled IVMs, $quantityOverhaul is 0 
+            $quantity -= $quantityOverhaul;
             
-        $msg.= "$model (ID $id) updated with quantity $quantity <br/>";
+            // Update regular IVM - Sortly only knows these ones
+            $sql = "UPDATE tl_sortlyTemplatesIVM SET quantityAvailable = $quantity WHERE id = $id";
+            $result_update = $db->query($sql);
+            $msg.= "$model (ID $id) updated with quantity $quantity <br/>";
+                
+            if($quantityOverhaul > 0){
+                switch ($id) {
+                    case 5:
+                        $id = 17;
+                    break;
+                    case 2:
+                        $id = 16;
+                    break;
+                }
+                // Update rows for facelifted IVMs
+                $sql = "UPDATE tl_sortlyTemplatesIVM SET quantityAvailable = $quantityOverhaul WHERE id = $id";
+                $result_update = $db->query($sql);
+                $msg.= "$model (ID $id) updated with quantity $quantityOverhaul <br/>";
+            }
     } 
     return $msg;
 }
+
 
 
 function calculateInaktiveIvmOnStock($db){
@@ -277,7 +495,7 @@ function calculateInaktiveIvmOnStock($db){
         sortly.IVM = 1 And
         sortly_ktc.name Not Like 'SCRAP' And
         sortly_ktc.name Not Like 'KTC-%' And
-        sortly.active = 0 And
+        sortly.available = 0 And
         sortly.raw = 0
     Group By
         tl_sortlyTemplatesIVM.name
@@ -290,15 +508,15 @@ function calculateInaktiveIvmOnStock($db){
         $quantity = $item['quantity'];
         $id = $item['id'];
         
-//         overwrite  Helix Master (5 to 17) and Slave (2 to 16) to assign Facelift ids
-        if($id == 5){$id = 17;}
-        if($id == 2){$id = 16;}
+//         overwrite  Helix Master (5 to 17) and Slave (2 to 16) to assign Facelift ids - all used for Brazil and not calculated
+        if($id == 5 or $id == 2){$id = 17;}
+ 
         
             // Update table
-            $sql_1 = "UPDATE tl_sortlyTemplatesIVM SET quantityOverhaul = $quantity WHERE id = $id";
-            $result_1 = $db->query($sql_1);
+        $sql_1 = "UPDATE tl_sortlyTemplatesIVM SET quantityOverhaul = $quantity WHERE id = $id";
+        $result_1 = $db->query($sql_1);
             
-        $msg.= "$model (ID $id) updated with quantity $quantity <br/>";
+        $msg.= "$model (ID $id) updated with return/overhaul quantity $quantity <br/>";
     } 
     return $msg;
 }
@@ -360,7 +578,11 @@ function calculateRawIvmOnStock($db){
     return $msg;
 }
 
+
+
 function singleUpdateQuantity($db, $sid, $newValue){
+    
+    $msg = "";
     //Basic URL to GET sortly items
     $sortlyUrlPrefix = 'https://api.sortly.co/api/v1/items/';
     $sortlyUrlAppendix = '/?&include=custom_attributes%2Cphotos%2Coptions';
@@ -382,6 +604,7 @@ function singleUpdateQuantity($db, $sid, $newValue){
 }                   
    
 
+
 // Update quantity
 function updatePayload($newValue){
     
@@ -392,37 +615,3 @@ function updatePayload($newValue){
 
     return $payload = json_encode($array,JSON_PRETTY_PRINT);
 }
-
-
-//function changeBoards(){
-//    
-//    $sql ="Select
-//            tl_toolcenterProjects.id As projectId,
-//            tl_sortlyTemplatesIVM.name As modelName,
-//            tl_toolcenterProjects.ktcId As ktc,
-//            tl_sortlyTemplatesIVM.id As modelID,
-//            tl_toolcenterProjectComponents.serial,
-//            tl_toolcenterProjectComponents.`usage`
-//        From
-//            tl_toolcenterProjectCategory Inner Join
-//            tl_toolcenterProjects On tl_toolcenterProjectCategory.id = tl_toolcenterProjects.projectCategory Inner Join
-//            tl_toolcenterProjectStatus On tl_toolcenterProjectStatus.id = tl_toolcenterProjects.projectStatus Inner Join
-//            tl_toolcenterProjectComponents On tl_toolcenterProjects.id = tl_toolcenterProjectComponents.pid Inner Join
-//            tl_sortlyTemplatesIVM On tl_sortlyTemplatesIVM.id = tl_toolcenterProjectComponents.componentModel
-//        Where
-//            tl_toolcenterProjectStatus.status Like 'planned' And
-//            tl_toolcenterProjectComponents.`usage` Like 'remove' And
-//            tl_sortlyTemplatesIVM.name Like 'KTC-HX/S' And
-//            tl_toolcenterProjects.ktcId Like 'KTC-3%'
-//        Order By
-//            projectId,
-//            ktc";
-//            $result = $db->query($sql);
-//    
-//    while($item = $result->fetch_assoc()){ 
-//        $sql_1 = "UPDATE tl_toolcenterProjectComponents SET componentModel = $quantity WHERE id = $id";
-//        if ($result_1 = $db->query($sql_1)){
-//            echo "Updated quantity column in table 'tl_sortlyTemplatesIVM' for id $id<br>"; 
-//        }
-//    }    
-//}

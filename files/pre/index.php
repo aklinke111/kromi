@@ -119,18 +119,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="form-container">
         <h2>Choose an Option</h2>
         <div class="button-container">
-            <button onclick="submitForm('calculateIVM')">
-                <i class="fas fa-exclamation-circle button-icon"></i>
-                <span>Calculate Quantities of IVMs</span>
-            </button>
-            
-            <hr class="button-separator">
 
+            <button onclick="submitForm('controllingReport')">
+                <i class="fas fa-exclamation-circle button-icon"></i>
+                <span>Finance 1 - controlling Report JEDOX</span>
+            </button>            
             <button onclick="submitForm('financeBom')">
                 <i class="fas fa-exclamation-circle button-icon"></i>
-                <span>Finance 1 - BOM-list</span>
+                <span>Finance 2 - KTC production 1/2 year</span>
             </button>
-            <button onclick="submitForm('ivmPartsBom_HTML')">
+            <button onclick="submitForm('financeForecast')">
+                <i class="fas fa-exclamation-circle button-icon"></i>
+                <span>Finance 3 - Forecast 24 months</span>
+            </button>    
+
+            <hr class="button-separator"><!-- comment -->
+            
+            <button onclick="submitForm('ivmBomDisplayAndUpdate')">
                 <i class="fas fa-exclamation-circle button-icon"></i>
                 <span>BOM list IVM & parts</span>
             </button>            
@@ -138,21 +143,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <i class="fas fa-exclamation-circle button-icon"></i>
                 <span>SORTLY nested structure</span>
             </button>
+            <button onclick="submitForm('calculateIVM')">
+                <i class="fas fa-exclamation-circle button-icon"></i>
+                <span>Calculate Quantities of IVMs</span>
+            </button>
+             
+            <hr class="button-separator">            
 
-            <hr class="button-separator">
-            
-            <button onclick="submitForm('fpdf')">
-                <i class="fas fa-exclamation-circle button-icon"></i>
-                <span>FPDF</span>
-            </button>
-            <button onclick="submitForm('manipulateData')">
-                <i class="fas fa-exclamation-circle button-icon"></i>
-                <span>Manipulate Data in MySQL DB</span>
-            </button>
-            <button onclick="submitForm('createMySqlTable')">
-                <i class="fas fa-exclamation-circle button-icon"></i>
-                <span>tmp_tables from TCWeb & Kromi API</span>
-            </button>
             <button onclick="submitForm('sortlyToMySQL')">
                 <i class="fas fa-exclamation-circle button-icon"></i>
                 <span>Sortly to MySQL</span>
@@ -161,20 +158,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <i class="fas fa-exclamation-circle button-icon"></i>
                 <span>Sortly Snapshot</span>
             </button>  
-            <button onclick="submitForm('calculatePricesBOM')">
-                <i class="fas fa-exclamation-circle button-icon"></i>
-                <span>Calculate Prices by BOM</span>
-            </button>
-            <button onclick="submitForm('mySqlDump')">
+
+            <hr class="button-separator">
+            
+          <button onclick="submitForm('mySqlDump')">
                 <i class="fas fa-exclamation-circle button-icon"></i>
                 <span>MySQL dump of contao database</span>
+            </button>            
+             <button onclick="submitForm('manipulateData')">
+                <i class="fas fa-exclamation-circle button-icon"></i>
+                <span>Manipulate Data in MySQL DB</span>
+            </button>
+            <button onclick="submitForm('createMySqlTable')">
+                <i class="fas fa-exclamation-circle button-icon"></i>
+                <span>tmp_tables from TCWeb & Kromi API</span>
             </button>
             
             <hr class="button-separator">
-            
-            <button onclick="submitForm('controllingReport')">
+
+            <button onclick="submitForm('calculatePricesBOM')">
                 <i class="fas fa-exclamation-circle button-icon"></i>
-                <span>Controlling Report KTC for JEDOX import</span>
+                <span>Purchase PDF</span>
+            </button>                
+            
+            <button onclick="submitForm('fpdf')">
+                <i class="fas fa-exclamation-circle button-icon"></i>
+                <span>FPDF</span>
             </button>
 
         </div>

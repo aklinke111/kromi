@@ -2,6 +2,11 @@
 // contao/dca/tl_forecastCategory.php
 use Contao\DC_Table;
 
+use App\EventListener\DataContainer\SortlyFunctions;
+use App\EventListener\DataContainer\UpdateSortly;
+use App\EventListener\DataContainer\MyFunctions;
+
+
 $GLOBALS['TL_DCA']['tl_forecastCategory'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
@@ -16,12 +21,12 @@ $GLOBALS['TL_DCA']['tl_forecastCategory'] = [
     'list' => [
         'sorting' => [
             'mode' => 1,
-            'fields' => ['category'],
+            'fields' => ['positionNo', 'costcenter', 'category'],
             'flag' => 11,
             'panelLayout' => 'search,limit'
         ],
         'label' => [
-            'fields' => ['category', 'note'],
+            'fields' => ['id', 'positionNo', 'costcenter', 'category', 'function', 'note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -53,7 +58,29 @@ $GLOBALS['TL_DCA']['tl_forecastCategory'] = [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50', 'maxlength' => 100, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 100, 'default' => '']
-        ],       
+        ],  
+        'positionNo' => [
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w25', 'enabled' => true],
+            'sql' => "INT(10)",
+        ],            
+        'costcenter' => array
+        (
+                'sorting' => true,
+                'inputType'               => 'select',
+                'filter'                  => true,
+                'search'                  => true,
+                'options_callback' => [
+                    MyFunctions::class, 'costcenter'
+                ],                                         
+                'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
+                'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
+        ), 
+        'function' => [
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => false],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+        ],           
         'note' => [
             'inputType' => 'textarea',
             'eval' => ['tl_class' => 'clr', 'rte' => 'tinyMCE', 'mandatory' => false],
@@ -61,6 +88,6 @@ $GLOBALS['TL_DCA']['tl_forecastCategory'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{category_legend},category,note'
+        'default' => '{legend}, positionNo, category, costcenter , function, note'
     ],
 ];

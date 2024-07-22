@@ -4,7 +4,7 @@
 // Heliotronic
 $GLOBALS['TL_LANG']['MOD']['heliotronicLicence'] = 'Licences';
 $GLOBALS['TL_LANG']['MOD']['heliotronicInvoices'] = 'Invoices';
-$GLOBALS['TL_LANG']['MOD']['heliotronicCategory'] = 'Categories';
+$GLOBALS['TL_LANG']['MOD']['heliotronicCategory'] = 'HT payment types';
 
 // income
 $GLOBALS['TL_LANG']['MOD']['payments'] = 'Payments';
@@ -19,7 +19,7 @@ $GLOBALS['TL_LANG']['MOD']['costFreight'] = 'Freight';
 $GLOBALS['TL_LANG']['MOD']['supplier'] = 'Suppliers';
 $GLOBALS['TL_LANG']['MOD']['customer'] = 'Customers +';
 $GLOBALS['TL_LANG']['MOD']['toolcenter'] = 'Toolcenters +';
-$GLOBALS['TL_LANG']['MOD']['costUnits'] = 'Cost Units +'; 
+$GLOBALS['TL_LANG']['MOD']['costcenter'] = 'Cost Units +'; 
 //$GLOBALS['TL_LANG']['MOD']['ivmPlus'] = 'IVM +';
 
 // projects

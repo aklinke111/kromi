@@ -4,15 +4,13 @@ namespace App\EventListener\DataContainer;
 
 use Contao\DataContainer;
 use Contao\Database;
-use Contao\DC_Table;
-use Contao\System;
-use Contao\Backend;
-use Contao\Input;
 
 class UpdateSortly 
 {
     public function updatePrice(DataContainer $dc){
+
 //        echo "a";
+        
         $text = "";   
         $db = Database::getInstance();
         $sortlyUrlPrefix = 'https://api.sortly.co/api/v1/items/'; 
@@ -20,14 +18,37 @@ class UpdateSortly
 
         // Perform actions or modifications on form submission
         if ($dc->activeRecord !== null) {
+//        echo "b";
 
             // only update price after delivery
-            if($dc->activeRecord->delivered){
-
+            if($dc->activeRecord->delivered and $dc->activeRecord->priceUpdate){
+//        echo "c";
+//        die();
                 $price = $dc->activeRecord->price;
-                $packageUnit = $dc->activeRecord->packageUnit;
+              
                 // Divide price by package unit
+                $packageUnit = $dc->activeRecord->packageUnit;
                 $price /= $packageUnit;
+                
+                //subtract discount
+                $discount = $dc->activeRecord->discount;
+                if($discount > 0){
+                   $price -= ($price/100*$discount); 
+                }
+                
+                //add surcharge
+                $surcharge = $dc->activeRecord->surcharge;
+                if($surcharge > 0){
+                   $price += ($price/100*$surcharge); 
+                }
+                
+                // VAT - subtract if included
+                $vatIncluded = $dc->activeRecord->vatIncluded;
+                $vat = $dc->activeRecord->vat;
+                if($vatIncluded){
+                   $price = $price/((100+$vat)/100);
+                }                
+                
                 $sortlyId = $dc->activeRecord->sortlyId;
     
                 $sql = "Update sortly set price = $price WHERE sortlyId LIKE '$sortlyId'";

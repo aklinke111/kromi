@@ -5,6 +5,8 @@ use Contao\Backend;
 use Contao\Database;
 use Contao\Input;
 
+use App\EventListener\DataContainer\SortlyFunctions;
+use App\EventListener\DataContainer\UpdateSortly;
 use App\EventListener\DataContainer\MyFunctions;
 
 $GLOBALS['TL_DCA']['tl_costTravel'] = [
@@ -26,7 +28,7 @@ $GLOBALS['TL_DCA']['tl_costTravel'] = [
             'panelLayout' => 'search,limit,sort'
         ],
         'label' => [
-            'fields' => ['receiptNo','receiptDate','costcenter','travelReason','category','payment','employee','note'],
+            'fields' => ['receiptNo','receiptDate','costcenter','travelReason','category','payment','excludedValue','employee','note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -57,7 +59,7 @@ $GLOBALS['TL_DCA']['tl_costTravel'] = [
             'search' => true,
             'sorting' => true,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'maxlength' => 10, 'mandatory' => true],
+            'eval' => ['tl_class' => 'w25', 'maxlength' => 10, 'mandatory' => true, 'unique' => true],
             'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
         ],
         'receiptDate' => [
@@ -72,7 +74,7 @@ $GLOBALS['TL_DCA']['tl_costTravel'] = [
                 'filter'                  => true,
                 'search'                  => true,
                 'options_callback' => [
-                    MyFunctions::class, 'costUnit'
+                    MyFunctions::class, 'costcenter'
                 ],                                         
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
@@ -108,6 +110,20 @@ $GLOBALS['TL_DCA']['tl_costTravel'] = [
             'eval' => ['tl_class' => 'w25', 'mandatory' => false],
             'sql' => "DECIMAL(10,2)",
         ],
+        'excludedValue' => [
+            'inputType' => 'text',
+            'search' => true,
+            'sorting' => true,  
+            'eval' => ['tl_class' => 'w50', 'mandatory' => false],
+            'sql'  => "DECIMAL(10,2) NOT NULL default '0.00'"
+        ],
+        'excludeNote' => [
+            'search' => true,
+            'sorting' => true,
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => false],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+        ],        
         'note' => [
             'search' => true,
             'inputType' => 'text',
@@ -116,6 +132,6 @@ $GLOBALS['TL_DCA']['tl_costTravel'] = [
         ]
     ],
     'palettes' => [
-        'default' => '{legend},receiptNo,receiptDate,costcenter;travelReason,category;employee,payment;note'
+        'default' => '{legend},receiptNo,receiptDate;costcenter,category;travelReason,employee;payment,exclude,excludeNote;note'
     ],
 ];

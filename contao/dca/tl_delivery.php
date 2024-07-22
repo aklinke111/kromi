@@ -118,6 +118,12 @@ $GLOBALS['TL_DCA']['tl_delivery'] = [
             'eval' => ['tl_class' => 'w50', 'mandatory' => false],
             'sql' => "DECIMAL(10,4)",
         ],
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],        
         'delivered' => [
             'search' => true,
             'sorting' => true,  

@@ -8,7 +8,7 @@
 
 
 // Include the FPDF library. Alter for your system
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/fpdf/fpdf.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/fpdf/fpdf.php";
 
 class PDF extends FPDF {
 
@@ -68,7 +68,7 @@ function _beginpage($orientation, $size, $rotation) {
 
 function Header()
 {
-	static $maxY, $fullwidth;
+	static $maxY = 0, $fullwidth = 0;
     
 	// Check if header for this page already exists
 	if( !isset($this->headerset[$this->page]) ) {
@@ -121,13 +121,13 @@ function morepagestable($lineheight=8) {
 
     static $fullwidth, $tmpheight, $maxpage;
     
-    unset($fullwidth);
+//    unset($fullwidth);
     
     // some things to set and 'remember'
 	$l = $this->lMargin;
 	$startheight = $h = $this->GetY();
 	$startpage = $currpage = $this->page;
-
+        $fullwidth = 0;
 	// calculate the whole width
 	foreach($this->tablewidths as $width) {
 		$fullwidth += $width;

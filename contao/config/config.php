@@ -1,16 +1,13 @@
 <?php
-// contao/config/config.php mistekacke
+// contao/config/config.php
 
-$GLOBALS['BE_MOD']['heliotronic']['heliotronicLicence'] = [
-    'tables' => ['tl_hel_licence'],
-];
-$GLOBALS['BE_MOD']['heliotronic']['heliotronicInvoices'] = [
-    'tables' => ['tl_hel_invoices'],
-];
-$GLOBALS['BE_MOD']['heliotronic']['heliotronicCategory'] = [
-    'tables' => ['tl_hel_category'],
-];
 
+$GLOBALS['BE_MOD']['categories']['categoryMain'] = [
+    'tables' => ['tl_categoryMain'],
+];
+$GLOBALS['BE_MOD']['categories']['categorySub'] = [
+    'tables' => ['tl_categorySub'],
+];
 
 
 $GLOBALS['BE_MOD']['income']['customerPayments'] = [
@@ -18,12 +15,16 @@ $GLOBALS['BE_MOD']['income']['customerPayments'] = [
 ];
 
 
+$GLOBALS['BE_MOD']['software']['heliotronicLicence'] = [
+    'tables' => ['tl_hel_licence'],
+];
+$GLOBALS['BE_MOD']['software']['heliotronicInvoices'] = [
+    'tables' => ['tl_hel_invoices'],
+];
+
 
 $GLOBALS['BE_MOD']['expenses']['costTravel'] = [
     'tables' => ['tl_costTravel'],
-];
-$GLOBALS['BE_MOD']['expenses']['tcostTravelCategory'] = [
-    'tables' => ['tl_costTravelCategory'],
 ];
 $GLOBALS['BE_MOD']['expenses']['costDguv'] = [
     'tables' => ['tl_costDguv'],
@@ -31,7 +32,9 @@ $GLOBALS['BE_MOD']['expenses']['costDguv'] = [
 $GLOBALS['BE_MOD']['expenses']['costFreight'] = [
     'tables' => ['tl_costFreight'],
 ];
-
+$GLOBALS['BE_MOD']['expenses']['costWorkwear'] = [
+    'tables' => ['tl_costWorkwear'],
+];
 
 
 
@@ -44,8 +47,8 @@ $GLOBALS['BE_MOD']['enrichment']['supplier'] = [
 $GLOBALS['BE_MOD']['enrichment']['toolcenter'] = [
     'tables' => ['tl_toolcenter'],
 ];
-$GLOBALS['BE_MOD']['enrichment']['costUnits'] = [
-    'tables' => ['tl_costUnits'],
+$GLOBALS['BE_MOD']['enrichment']['costcenter'] = [
+    'tables' => ['tl_costcenter'],
 ];
 
 //$GLOBALS['BE_MOD']['enrichment']['ivmPlus'] = [
@@ -55,22 +58,15 @@ $GLOBALS['BE_MOD']['enrichment']['costUnits'] = [
 $GLOBALS['BE_MOD']['projects']['ToolcenterProjects'] = [
     'tables' => ['tl_toolcenterProjects', 'tl_toolcenterProjectComponents'],
 ];
-$GLOBALS['BE_MOD']['projects']['ToolcenterProjectCategory'] = [
-    'tables' => ['tl_toolcenterProjectCategory'],
-];
 $GLOBALS['BE_MOD']['projects']['ToolcenterProjectStatus'] = [
     'tables' => ['tl_toolcenterProjectStatus'],
 ];
 
 
 
-$GLOBALS['BE_MOD']['finance']['Forecast Category'] = [
-    'tables' => ['tl_forecastCategory'],
+$GLOBALS['BE_MOD']['finance']['costcenter'] = [
+    'tables' => ['tl_costcenter'],
 ];
-$GLOBALS['BE_MOD']['finance']['costUnits'] = [
-    'tables' => ['tl_costUnits'],
-];
-
 
 
 $GLOBALS['BE_MOD']['inventory']['ToolcenterInventory'] = [
@@ -89,23 +85,40 @@ $GLOBALS['BE_MOD']['engineering']['bom'] = [
 ];
 
 
-
 $GLOBALS['BE_MOD']['misc.']['myLogs'] = array
 (
 	'tables' => array('tl_myLogs')
 );
-$GLOBALS['BE_MOD']['misc.']['errorNote'] = array
+$GLOBALS['BE_MOD']['misc.']['myGlobals'] = array
 (
-	'tables' => array('tl_errorNote')
+	'tables' => array('tl_globals')
 );
-$GLOBALS['BE_MOD']['misc.']['errorCategory'] = array
+$GLOBALS['BE_MOD']['misc.']['notes'] = array
 (
-	'tables' => array('tl_errorCategory')
+	'tables' => array('tl_notes')
 );
-$GLOBALS['BE_MOD']['misc.']['Globals'] = array
-(
-	'tables' => array('tl_Globals')
-);
+
+
+
+
+$GLOBALS['BE_MOD']['dimensions']['forecastCategory'] = [
+    'tables' => ['tl_forecastCategory'],
+];
+$GLOBALS['BE_MOD']['dimensions']['heliotronicCategory'] = [
+    'tables' => ['tl_hel_category'],
+];
+$GLOBALS['BE_MOD']['dimensions']['costTravelCategory'] = [
+    'tables' => ['tl_costTravelCategory'],
+];
+$GLOBALS['BE_MOD']['dimensions']['toolcenterProjectCategory'] = [
+    'tables' => ['tl_toolcenterProjectCategory'],
+];
+$GLOBALS['BE_MOD']['dimensions']['notesCategory'] = [
+    'tables' => ['tl_notesCategory'],
+];
+$GLOBALS['BE_MOD']['dimensions']['globalsCategory'] = [
+    'tables' => ['tl_globalsCategory'],
+];
 
 
 

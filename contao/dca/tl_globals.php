@@ -2,14 +2,10 @@
 // Define global parameters and specs
 use Contao\DC_Table;
 
-$GLOBALS['TL_DCA']['tl_Globals'] = [
+$GLOBALS['TL_DCA']['tl_globals'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
         'enableVersioning' => true,
-//        'onload_callback' => array
-//        (
-//                array('tl_country', 'country')
-//        ),
         'switchToEdit' => true,
         'sql' => [
             'keys' => [
@@ -25,7 +21,7 @@ $GLOBALS['TL_DCA']['tl_Globals'] = [
             'panelLayout' => 'search,sort'
         ],
         'label' => [
-            'fields' => ['var','val','category','note'],
+            'fields' => ['var','val','categoryId','note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -64,15 +60,21 @@ $GLOBALS['TL_DCA']['tl_Globals'] = [
             'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
         ],
-        'category' => array
+        'categoryId' => array
         (
                 'inputType'               => 'select',
                 'filter'                  => true,
                 'search'                  => true,
-                'foreignKey'              => "tl_hel_category.category",                                          
+                'foreignKey'              => "tl_globalsCategory.name",                                          
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'string', 'length' => 3, 'default' => '']
         ),   
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],        
         'note' => [
             'search' => true,
             'inputType' => 'text',
@@ -81,7 +83,7 @@ $GLOBALS['TL_DCA']['tl_Globals'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{legend},var,val;category;note'
+        'default' => '{legend},var,val;categoryId;note'
     ],
 ];
 

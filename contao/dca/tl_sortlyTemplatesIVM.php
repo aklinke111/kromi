@@ -6,6 +6,10 @@
 use Contao\DataContainer;
 use Contao\DC_Table;
 
+use App\EventListener\DataContainer\SortlyFunctions;
+use App\EventListener\DataContainer\UpdateSortly;
+use App\EventListener\DataContainer\MyFunctions;
+
 $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
     'config' => [
         'dataContainer' => DC_Table::class,
@@ -27,7 +31,7 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'panelLayout' => 'search,limit'
         ],
         'label' => [
-            'fields' => ['name','note','sortlyId','quantity','quantityRaw','quantityForecast','quantityOverhaul','quantityReturn','quantityProjects','quantityAvailable','quantityMinimum','sid','active'],
+            'fields' => ['name','note','sortlyId','quantity','quantityRaw','quantityExtra','quantityForecastInstallations','quantityForecastDeinstallations','quantityOverhaul','quantityReturn','quantityProjects','quantityAvailable','quantityMinimum','sid','active'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -86,7 +90,7 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'sorting' => true,  
             'eval' => ['tl_class' => 'w50'],
             'sql' => "DECIMAL(10,2)",
-        ],
+        ],        
         'priceHr' => [
             'inputType' => 'text',
             'search' => true,
@@ -94,6 +98,13 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'eval' => ['tl_class' => 'w50'],
             'sql' => "DECIMAL(10,2)",
         ],
+        'remainingValue' => [
+            'inputType' => 'text',
+            'search' => true,
+            'sorting' => true,  
+            'eval' => ['tl_class' => 'w50'],
+            'sql' => "DECIMAL(10,2)",
+        ],        
         'photoUrl' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50 wizard', 'enabled' => true],
@@ -109,7 +120,12 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'eval' => ['tl_class' => 'w25', 'enabled' => false],
             'sql' => "INT(10)",
         ],         
-       'quantityOrdered' => [
+       'quantityOrderedExternal' => [
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w25', 'enabled' => false],
+            'sql' => "INT(10)",
+        ],    
+       'quantityOrderedInternal' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'enabled' => false],
             'sql' => "INT(10)",
@@ -118,7 +134,12 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'enabled' => false],
             'sql' => "INT(10)",
-        ],         
+        ],  
+       'quantityExtra' => [
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w25', 'enabled' => false],
+            'sql' => "INT(10)",
+        ],   
        'quantityRaw' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'enabled' => false],
@@ -129,11 +150,16 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'eval' => ['tl_class' => 'w25', 'enabled' => false],
             'sql' => "INT(10)",
         ],        
-        'quantityForecast' => [
+        'quantityForecastInstallations' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'enabled' => true],
             'sql' => "INT(10)",
         ],
+       'quantityForecastDeinstallations' => [
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w25', 'enabled' => false],
+            'sql' => "INT(10)",
+        ],         
         'quantityOverhaul' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'enabled' => false],
@@ -154,6 +180,11 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'eval' => ['tl_class' => 'w25', 'enabled' => true],
             'sql' => "INT(10)",
         ],
+        'quatityScrapped' => [
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w25', 'enabled' => true],
+            'sql' => "INT(10)",
+        ],        
         'noteJedox' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50 wizard', 'enabled' => true],
@@ -170,6 +201,12 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'search'                  => true,
             'sql' => ['type' => 'boolean','default' => false]
         ],
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],        
         'financeReport' => [
             'inputType' => 'checkbox',
             'filter'                  => true,
@@ -183,6 +220,6 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{sortlyTemplatesIVM},name,sortlyId;photoUrl,photoName;quantityForecast,quantityMinimum;created,sid,pid,active,financeReport,note'
+        'default' => '{sortlyTemplatesIVM},name,sortlyId;photoUrl,photoName;quantityExtra,quantityForecastDeinstallations,quantityForecastInstallations,quantityMinimum;created,sid,pid,active,financeReport,note'
     ],
 ];

@@ -43,17 +43,48 @@ class MyFunctions
         die();
     }
     
+ 
     
-    
-    public function costUnit()
+    public function category(DataContainer $dc)
     {
         $db = Database::getInstance();
+
+        if ($dc->activeRecord) {
+            // Get the table name
+            $tableName = $dc->table;
+        }
+        
+    switch ($tableName) {
+    case 'tl_hel_invoices':
+        $pid = 6;
+        break;
+    case 1:
+//        echo "i ist gleich 1";
+        break;
+    case 2:
+//        echo "i ist gleich 2";
+        break;
+}    
+        
         $value = array();        
-        $result = $db->prepare("SELECT * FROM tl_costUnits ORDER BY costUnit")
+        $result = $db->prepare("SELECT * FROM tl_categorySub Where pid = $pid Order BY name")
                                  ->execute();
         while($result->next())
         {
-                $value[$result->costUnit] = $result->costUnit." ".$result->description;
+                $value[$result->id] = $result->name;
+        }
+        return $value;
+    }
+    
+    public function costcenter()
+    {
+        $db = Database::getInstance();
+        $value = array();        
+        $result = $db->prepare("SELECT * FROM tl_costcenter ORDER BY costcenter")
+                                 ->execute();
+        while($result->next())
+        {
+                $value[$result->costcenter] = $result->costcenter." ".$result->description;
         }
         return $value;
     }

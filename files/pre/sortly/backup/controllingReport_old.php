@@ -11,7 +11,7 @@ $sql = "Select
     'Actual' As Version,
     Date_Format(CurDate(), '%Y-%m') As Period,
     tl_customer.customerNo As CostObject,
-    tl_toolcenter.costcenter As CostUnit,
+    tl_toolcenter.costcenter As costcenter,
     Replace(sortly_ktc.name, '-', '') As KTCID,
     tl_sortlyTemplatesIVM.noteJedox As Item,
     'NA' As Currency,
@@ -25,7 +25,7 @@ From
     sortly On sortly_ktc.sid = sortly.pid Left Join
     tl_sortlyTemplatesIVM On tl_sortlyTemplatesIVM.name = sortly.name Inner Join
     tl_toolcenter On sortly_ktc.name = tl_toolcenter.ktcId Right Join
-    tl_costUnits On tl_toolcenter.costcenter = tl_costUnits.costUnit
+    tl_costcenter On tl_toolcenter.costcenter = tl_costcenter.costcenter
 Where
     sortly_ktc.name Like 'KTC-%' And
     tl_customer.active = 1
@@ -34,7 +34,7 @@ Group By
     tl_toolcenter.costcenter,
     Replace(sortly_ktc.name, '-', ''),
     tl_sortlyTemplatesIVM.noteJedox,
-    tl_costUnits.description,
+    tl_costcenter.description,
     sortly_subsidiary.name,
     sortly_customer.name,
     sortly_ktc.active,
@@ -53,7 +53,7 @@ while($item = $result->fetch_assoc()){
     $Version = $item['Version'];
     $Period = $item['Period'];
     $CostObject = $item['CostObject'];
-    $CostUnit = $item['CostUnit'];
+    $costcenter = $item['costcenter'];
     $NewKTCID = $item['KTCID']; 
     $Currency = $item['Currency'];
     $Quantity = $item['Quantity'];
@@ -66,13 +66,13 @@ while($item = $result->fetch_assoc()){
         // Title 
         $Item = "Quantity of KTC-ID";
         // Insert dataset title
-        executeQuery($db,$tableName,$Version,$Period,$CostObject,$CostUnit,$KTCID,$Item,$Currency,$Quantity);
+        executeQuery($db,$tableName,$Version,$Period,$CostObject,$costcenter,$KTCID,$Item,$Currency,$Quantity);
     } 
     
     // Regular Entry
     $Item = "Quantity of ".$item['Item'];
     // Insert dataset standard
-    executeQuery($db,$tableName,$Version,$Period,$CostObject,$CostUnit,$KTCID,$Item,$Currency,$Quantity);
+    executeQuery($db,$tableName,$Version,$Period,$CostObject,$costcenter,$KTCID,$Item,$Currency,$Quantity);
 }
 
 
@@ -125,13 +125,13 @@ function mailCSV($csvContents){
 
 
 
-function executeQuery($db,$tableName,$Version,$Period,$CostObject,$CostUnit,$KTCID,$Item,$Currency,$Quantity){
+function executeQuery($db,$tableName,$Version,$Period,$CostObject,$costcenter,$KTCID,$Item,$Currency,$Quantity){
     // Prepare the SQL statement
     $sql = "INSERT INTO $tableName(
         Version,
         Period,
         CostObject,
-        CostUnit,
+        costcenter,
         KTCID,
         Item,
         Currency,
@@ -145,7 +145,7 @@ function executeQuery($db,$tableName,$Version,$Period,$CostObject,$CostUnit,$KTC
         $Version,
         $Period,                        
         $CostObject,
-        $CostUnit,
+        $costcenter,
         $KTCID,
         $Item, 
         $Currency,

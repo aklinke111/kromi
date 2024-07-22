@@ -335,7 +335,7 @@ function dataFromSortlyAPI(){
                     )";
 
         $stmt = $db->prepare($sql);
-        $parameterTypes = "issssdiissssssssssssssssiiiiiisisssssii";
+        $parameterTypes = "issssdiisssssssissssisissiisssiissiisss";
         $stmt->bind_param($parameterTypes,
 
             time(),

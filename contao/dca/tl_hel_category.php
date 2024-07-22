@@ -16,12 +16,12 @@ $GLOBALS['TL_DCA']['tl_hel_category'] = [
     'list' => [
         'sorting' => [
             'mode' => 1,
-            'fields' => ['category'],
+            'fields' => ['name'],
             'flag' => 11,
             'panelLayout' => 'search,limit'
         ],
         'label' => [
-            'fields' => ['category', 'note'],
+            'fields' => ['name', 'note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -48,7 +48,7 @@ $GLOBALS['TL_DCA']['tl_hel_category'] = [
         'tstamp' => [
             'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
         ],
-        'category' => [
+        'name' => [
             'search' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50', 'maxlength' => 100, 'mandatory' => true],
@@ -61,6 +61,6 @@ $GLOBALS['TL_DCA']['tl_hel_category'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{category_legend},category,note'
+        'default' => '{category_legend},name,note'
     ],
 ];

@@ -51,7 +51,7 @@ $GLOBALS['TL_DCA']['tl_hel_licence'] = [
         'ktcId' => [
             'search' => true,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50', 'maxlength' => 3, 'mandatory' => true],
+            'eval' => ['tl_class' => 'w50', 'maxlength' => 10, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
         ],
         'dateActivated' => [
@@ -75,6 +75,12 @@ $GLOBALS['TL_DCA']['tl_hel_licence'] = [
                 'default' => '3250.00',
                 'notnull' => true,
             ],
+        ], 
+        'exclude' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
         ],        
         'note' => [
             'inputType' => 'textarea',
