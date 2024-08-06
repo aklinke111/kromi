@@ -1,7 +1,7 @@
 <?php
 // Load the database configuration file
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
-//include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/css/styles.css";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
+//include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/css/styles.css";
 //
 //
 // main function for calculating prices according BOM for all IVMs listed in sortly templates

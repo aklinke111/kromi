@@ -1,7 +1,7 @@
 <?php
     
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functionsMail.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functionsMail.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
 
 $tableName = "controllingReportKtc";
     

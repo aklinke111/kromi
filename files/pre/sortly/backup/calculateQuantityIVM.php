@@ -4,8 +4,8 @@
 //header('Content-Type: application/json');
 //
 // Load the database configuration file
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/sortly/updateSortly.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/sortly/updateSortly.php";
 
 // main function for calculating quantites of IVM and update table tl_sortlyTemplatesIVM
 if (isset($_GET['webhookFunction'])) {

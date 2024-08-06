@@ -1,8 +1,8 @@
 <?php
 
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/files.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/mail.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/files.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/mail.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
 
 $tableName = "controllingReportKtc";
     
@@ -125,7 +125,7 @@ function tableToCSV($db, $tableName){
     $msg = "";
         
     // location backupfile tmp
-    $backupFilePath = $_SERVER['DOCUMENT_ROOT']."/files/pre/ktc/finance/backupAllocation/";
+    $backupFilePath = $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/ktc/finance/backupAllocation/";
     
     // location backupfile new
     $database = "xm3xbj34_kromiag";

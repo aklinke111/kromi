@@ -28,7 +28,7 @@ $GLOBALS['TL_DCA']['tl_costWorkwear'] = [
             'panelLayout' => 'search,limit,sort'
         ],
         'label' => [
-            'fields' => ['employee','receiptNo','receiptDate','costcenter','payment','exclude','note'],
+            'fields' => ['receiptNo', 'receiptDate', 'costcenter', 'articleNo', 'articleName', 'quantity', 'payment','exclude','note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -59,7 +59,7 @@ $GLOBALS['TL_DCA']['tl_costWorkwear'] = [
             'search' => true,
             'sorting' => true,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'maxlength' => 10, 'mandatory' => true, 'unique' => true],
+            'eval' => ['tl_class' => 'w25', 'maxlength' => 10, 'mandatory' => true, 'unique' => false],
             'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
         ],
         'receiptDate' => [
@@ -67,6 +67,20 @@ $GLOBALS['TL_DCA']['tl_costWorkwear'] = [
             'eval' => ['tl_class' => 'w25 wizard', 'maxlength' => 50, 'datepicker' => true],
             'sql' => ['type' => 'string', 'length' => 50, 'default' => '']
         ],
+        'articleNo' => [
+            'search' => true,
+            'sorting' => true,
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w25', 'maxlength' => 100],
+            'sql' => ['type' => 'string', 'length' => 100, 'default' => '']
+        ],     
+        'articleName' => [
+            'search' => true,
+            'sorting' => true,
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w25', 'maxlength' => 255],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+        ],        
         'costcenter' => array
         (
                 'sorting' => true,
@@ -79,16 +93,11 @@ $GLOBALS['TL_DCA']['tl_costWorkwear'] = [
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
         ), 
-        'employee' => array
-        (
-                'inputType'               => 'select',
-                'filter'                  => true,
-                'search'                  => true,     
-                'sorting'                 => true,
-                'foreignKey'              => "tl_member.CONCAT(lastname,', ',firstname)",                                       
-                'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
-                'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
-        ),
+        'quantity' => [
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w25', 'mandatory' => false],
+            'sql' => "INTEGER",
+        ],        
         'payment' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'mandatory' => false],
@@ -98,6 +107,7 @@ $GLOBALS['TL_DCA']['tl_costWorkwear'] = [
             'search' => true,
             'sorting' => true,  
             'inputType' => 'checkbox',
+            'eval' => ['tl_class' => 'w25', 'mandatory' => false],            
             'sql' => ['type' => 'boolean','default' => false]
         ],
         'excludeNote' => [
@@ -115,6 +125,6 @@ $GLOBALS['TL_DCA']['tl_costWorkwear'] = [
         ]
     ],
     'palettes' => [
-        'default' => '{legend},receiptNo,receiptDate;costcenter,employee;payment,exclude,excludeNote;note'
+        'default' => '{legend},receiptNo, receiptDate; costcenter; articleNo, articleName, quantity, payment; exclude, excludeNote; note'
     ],
 ];

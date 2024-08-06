@@ -1,0 +1,2 @@
+# convert date
+UPDATE tl_costWorkwear SET receiptDate =  DATE_FORMAT(STR_TO_DATE(receiptDate, '%m/%d/%Y'), '%Y-%m-%d')

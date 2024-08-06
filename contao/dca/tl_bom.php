@@ -41,7 +41,7 @@ $GLOBALS['TL_DCA']['tl_bom'] = [
                 
             // variables    
             $sortlyId = $row['sortlyId']; 
-            $bomQuantity = round($row['bomQuantity'],0);
+            $bomQuantity = $row['bomQuantity'];
             
             $note = $row['note'];
                 if(!empty($note)){
@@ -62,8 +62,8 @@ $GLOBALS['TL_DCA']['tl_bom'] = [
                 }
                 
                 // calculated or excluded
-                if($row['calculate'] !== 1){
-                    $text = "EXCLUDED FROM CALCULATION";
+                if($row['calculate'] == 0 or $row['hr'] == 1){
+                    $text = $bomQuantity." ".$parts." WITH PRICE OF ".$price."€ EXCLUDED FROM CALCULATION";
                 return '<div class="tl_content_left"><span style="color:red">'.$text.'</span></div>';
                 } else {
                 return '<div class="tl_content_left"><span style="color:blue;"><b>'.$bomQuantity.'</b></span>
@@ -126,8 +126,16 @@ $GLOBALS['TL_DCA']['tl_bom'] = [
             'search' => true,
             'sorting' => true,  
             'inputType' => 'checkbox',
+            'eval' => ['tl_class' => 'w50 wizard'],            
             'sql' => ['type' => 'boolean','default' => false]
-        ],        
+        ],
+        'hr' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'eval' => ['tl_class' => 'w50 wizard'],            
+            'sql' => ['type' => 'boolean','default' => false]
+        ],            
         'note' => [
             'search' => true,
             'sorting' => true,
@@ -137,7 +145,7 @@ $GLOBALS['TL_DCA']['tl_bom'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{{bom_legend}, sortlyId, bomQuantity, calculate ; note'
+        'default' => '{{bom_legend}, sortlyId, bomQuantity, hr, calculate ; note'
     ],
 ];
 
@@ -147,7 +155,7 @@ class tl_bom extends Backend
     {
         //\System::log('The e-mail was sent successfully', __METHOD__, TL_GENERAL);
         $value = array();        
-        $result = $this->Database->prepare("SELECT DISTINCT sortlyId, name FROM sortly WHERE pid IN(58670984,72430051) ORDER BY sortlyId")
+        $result = $this->Database->prepare("SELECT DISTINCT sortlyId, name FROM sortly WHERE pid IN(58670984,73134913) ORDER BY sortlyId")
                                  ->execute();
         while($result->next())
         {

@@ -14,7 +14,7 @@
 header('Content-Type: application/json');
 
 //// Load the database configuration file
-//include_once "/files/pre/db/dbConfig.php";
+//include_once "/files/prepare_kr/db/dbConfig.php";
 //
 ////Start migration
 //migrateKomponentenFromTcwebToSortly($db);

@@ -1,9 +1,9 @@
 <?php
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/db/dbConfig.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/sql.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/date.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/src/functions/calculate.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/pre/sortly/ivmBomDisplayAndUpdate.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/sql.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/date.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/calculate.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/sortly/ivmBomDisplayAndUpdate.php";
 
 if (isset($_GET['webhookFunction'])) {
 
@@ -73,7 +73,7 @@ function main_financeForecast($db){
     
     for ($i = 0; $i <= ($ForecastPeriod-1); $i++) {
 
-    $forecastDate =  forecastDate($i); //files/pre/src/functions/date.php
+    $forecastDate =  forecastDate($i); //files/prepare_kr/src/functions/date.php
     
     $msg .= "<b>Forecast Year-Month: " . $forecastDate. "</b><br>";
     

@@ -90,7 +90,7 @@ $GLOBALS['TL_DCA']['tl_hel_invoices'] = [
                 'inputType'               => 'select',
                 'filter'                  => true,
                 'search'                  => true,
-                'foreignKey'              => 'tl_hel_category.category',                                                        
+                'foreignKey'              => 'tl_hel_category.name',                                                        
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'integer', 'length' => 10, 'default' => 0]
         ), 

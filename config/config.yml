@@ -1,3 +1,9 @@
+#https://contao.ninja/contao-tipps/tipps-und-tricks-reader/benutzerdefinierte-tabellen-ignorieren.html
+
 doctrine:
     dbal:
         schema_filter: ~^(tl_.*)~
+
+#doctrine:
+#    dbal:
+#        schema_filter: ~^(?!bomCalculations$|controllingReportKtc$|kr_forecastEngineering$|sales$|sortly$|sortlySnapshot$|sortly_country$|sortly_customer$|sortly_ktc$|sortly_subsidiary$|submissions$)~g

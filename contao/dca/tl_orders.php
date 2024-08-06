@@ -32,7 +32,7 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'panelLayout' => 'search,limit,sort'
         ],
         'label' => [
-            'fields' => ['supplierId','sortlyId','invoiceNoDMS','invoiceDate','supplierArticleNo','orderQuantity', 'price','discount','surcharge','vat','orderDate', 'estimatedDeliveryDate', 'delivered', 'note'],
+            'fields' => ['supplierId','sortlyId','bySideOrder','invoiceNoDMS','invoiceDate','supplierArticleNo','orderQuantity', 'price','discount','surcharge','vat','orderDate', 'estimatedDeliveryDate', 'delivered', 'capex', 'note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -79,6 +79,13 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'eval' => ['tl_class' => 'w50 wizard', 'enabled' => false],
             'sql' => ['type' => 'string', 'length' => 20, 'default' => '']
         ],
+        'bySideOrder' => [
+            'search' => true,
+            'sorting' => true,
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w50 wizard', 'maxlength' => 255],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+        ],        
         'supplierArticleNo' => [
             'search' => true,
             'sorting' => true,
@@ -179,6 +186,12 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'inputType' => 'checkbox',
             'sql' => ['type' => 'boolean','default' => false]
         ],  
+        'capex' => [
+            'search' => true,
+            'sorting' => true,  
+            'inputType' => 'checkbox',
+            'sql' => ['type' => 'boolean','default' => false]
+        ],          
         'note' => [
             'inputType' => 'textarea',
             'eval' => ['tl_class' => 'clr', 'rte' => 'tinyMCE', 'mandatory' => false],
@@ -186,6 +199,6 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{article_legend},sortlyId;{suppliers_legend},supplierId,supplierArticleNo;{orders_legend};orderQuantity,packageUnit,price;discount,surcharge;orderDate,estimatedDeliveryDate,invoiceDate,invoiceNoDMS;{delivery_legend},internalExternal;calculated,vat,vatIncluded,priceUpdate,delivered;{note_legend:hide},note'
+        'default' => '{article_legend},sortlyId;{suppliers_legend},bySideOrder,supplierId,supplierArticleNo;{orders_legend};orderQuantity,packageUnit,price;discount,surcharge;orderDate,estimatedDeliveryDate,invoiceDate,invoiceNoDMS;{delivery_legend},internalExternal;calculated,vat,vatIncluded,priceUpdate,delivered,capex;{note_legend:hide},note'
     ],
 ];

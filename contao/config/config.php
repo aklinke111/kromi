@@ -2,26 +2,15 @@
 // contao/config/config.php
 
 
-$GLOBALS['BE_MOD']['categories']['categoryMain'] = [
-    'tables' => ['tl_categoryMain'],
+$GLOBALS['BE_MOD']['engineering']['orders'] = [
+    'tables' => ['tl_orders'],
 ];
-$GLOBALS['BE_MOD']['categories']['categorySub'] = [
-    'tables' => ['tl_categorySub'],
-];
-
-
-$GLOBALS['BE_MOD']['income']['customerPayments'] = [
-    'tables' => ['tl_payments'],
+$GLOBALS['BE_MOD']['engineering']['bom'] = [
+    'tables' => ['tl_sortlyTemplatesIVM', 'tl_bom'],
 ];
 
 
-$GLOBALS['BE_MOD']['software']['heliotronicLicence'] = [
-    'tables' => ['tl_hel_licence'],
-];
-$GLOBALS['BE_MOD']['software']['heliotronicInvoices'] = [
-    'tables' => ['tl_hel_invoices'],
-];
-
+//----------------------------------------------------
 
 $GLOBALS['BE_MOD']['expenses']['costTravel'] = [
     'tables' => ['tl_costTravel'],
@@ -36,7 +25,23 @@ $GLOBALS['BE_MOD']['expenses']['costWorkwear'] = [
     'tables' => ['tl_costWorkwear'],
 ];
 
+//----------------------------------------------------
 
+$GLOBALS['BE_MOD']['software']['heliotronicLicence'] = [
+    'tables' => ['tl_hel_licence'],
+];
+$GLOBALS['BE_MOD']['software']['heliotronicInvoices'] = [
+    'tables' => ['tl_hel_invoices'],
+];
+
+
+//----------------------------------------------------
+
+$GLOBALS['BE_MOD']['income']['customerPayments'] = [
+    'tables' => ['tl_payments'],
+];
+
+//----------------------------------------------------
 
 $GLOBALS['BE_MOD']['enrichment']['customer'] = [
     'tables' => ['tl_customer'],
@@ -47,13 +52,14 @@ $GLOBALS['BE_MOD']['enrichment']['supplier'] = [
 $GLOBALS['BE_MOD']['enrichment']['toolcenter'] = [
     'tables' => ['tl_toolcenter'],
 ];
-$GLOBALS['BE_MOD']['enrichment']['costcenter'] = [
-    'tables' => ['tl_costcenter'],
+$GLOBALS['BE_MOD']['enrichment']['region'] = [
+    'tables' => ['tl_region'],
+];
+$GLOBALS['BE_MOD']['enrichment']['country2region'] = [
+    'tables' => ['tl_country2Region'],
 ];
 
-//$GLOBALS['BE_MOD']['enrichment']['ivmPlus'] = [
-//    'tables' => ['tl_sortlyTemplatesIVMplus'],
-//];
+//----------------------------------------------------
 
 $GLOBALS['BE_MOD']['projects']['ToolcenterProjects'] = [
     'tables' => ['tl_toolcenterProjects', 'tl_toolcenterProjectComponents'],
@@ -62,28 +68,22 @@ $GLOBALS['BE_MOD']['projects']['ToolcenterProjectStatus'] = [
     'tables' => ['tl_toolcenterProjectStatus'],
 ];
 
-
+//----------------------------------------------------
 
 $GLOBALS['BE_MOD']['finance']['costcenter'] = [
     'tables' => ['tl_costcenter'],
 ];
+$GLOBALS['BE_MOD']['finance']['forecastCategory'] = [
+    'tables' => ['tl_forecastCategory'],
+];
 
+//----------------------------------------------------
 
 $GLOBALS['BE_MOD']['inventory']['ToolcenterInventory'] = [
     'tables' => ['tl_toolcenterInventory'],
 ];
 
-
-$GLOBALS['BE_MOD']['engineering']['orders'] = [
-    'tables' => ['tl_orders'],
-];
-$GLOBALS['BE_MOD']['engineering']['delivery'] = [
-    'tables' => ['tl_delivery'],
-];
-$GLOBALS['BE_MOD']['engineering']['bom'] = [
-    'tables' => ['tl_sortlyTemplatesIVM', 'tl_bom'],
-];
-
+//----------------------------------------------------
 
 $GLOBALS['BE_MOD']['misc.']['myLogs'] = array
 (
@@ -98,12 +98,9 @@ $GLOBALS['BE_MOD']['misc.']['notes'] = array
 	'tables' => array('tl_notes')
 );
 
+//----------------------------------------------------
 
 
-
-$GLOBALS['BE_MOD']['dimensions']['forecastCategory'] = [
-    'tables' => ['tl_forecastCategory'],
-];
 $GLOBALS['BE_MOD']['dimensions']['heliotronicCategory'] = [
     'tables' => ['tl_hel_category'],
 ];
@@ -120,6 +117,7 @@ $GLOBALS['BE_MOD']['dimensions']['globalsCategory'] = [
     'tables' => ['tl_globalsCategory'],
 ];
 
+//----------------------------------------------------
 
 
 //// Define DCA configuration for tl_my_table

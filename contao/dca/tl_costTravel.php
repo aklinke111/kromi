@@ -28,7 +28,7 @@ $GLOBALS['TL_DCA']['tl_costTravel'] = [
             'panelLayout' => 'search,limit,sort'
         ],
         'label' => [
-            'fields' => ['receiptNo','receiptDate','costcenter','travelReason','category','payment','excludedValue','employee','note'],
+            'fields' => ['receiptNo','reportTitle','description','positionNo','expenseDate','employee','payment','categoryId','costcenter'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -59,42 +59,35 @@ $GLOBALS['TL_DCA']['tl_costTravel'] = [
             'search' => true,
             'sorting' => true,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'maxlength' => 10, 'mandatory' => true, 'unique' => true],
+            'eval' => ['tl_class' => 'w25', 'maxlength' => 10, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
-        ],
-        'receiptDate' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25 wizard', 'maxlength' => 50, 'datepicker' => true],
-            'sql' => ['type' => 'string', 'length' => 50, 'default' => '']
-        ],
-        'costcenter' => array
-        (
-                'sorting' => true,
-                'inputType'               => 'select',
-                'filter'                  => true,
-                'search'                  => true,
-                'options_callback' => [
-                    MyFunctions::class, 'costcenter'
-                ],                                         
-                'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
-                'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
-        ), 
-        'travelReason' => [
+        ],        
+        'reportTitle' => [
             'search' => true,
             'sorting' => true,
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => true],
             'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+        ],   
+        'description' => [
+            'search' => true,
+            'sorting' => true,
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w50', 'maxlength' => 1000, 'mandatory' => false],
+            'sql' => ['type' => 'string', 'length' => 1000, 'default' => '']
+        ], 
+        'positionNo' => [
+            'search' => true,
+            'sorting' => true,
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w25', 'maxlength' => 10],
+            'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
+        ],           
+        'expenseDate' => [
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w25 wizard', 'maxlength' => 50, 'datepicker' => true],
+            'sql' => ['type' => 'string', 'length' => 50, 'default' => '']
         ],
-        'category' => array
-        (
-                'inputType'               => 'select',
-                'filter'                  => true,
-                'search'                  => true,
-                'foreignKey'              => "tl_costTravelCategory.name",                                          
-                'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
-                'sql' => ['type' => 'string', 'length' => 3, 'default' => '']
-        ), 
         'employee' => array
         (
                 'inputType'               => 'select',
@@ -104,26 +97,41 @@ $GLOBALS['TL_DCA']['tl_costTravel'] = [
                 'foreignKey'              => "tl_member.CONCAT(lastname,', ',firstname)",                                       
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
-        ),
+        ),  
         'payment' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'mandatory' => false],
             'sql' => "DECIMAL(10,2)",
-        ],
-        'excludedValue' => [
-            'inputType' => 'text',
-            'search' => true,
-            'sorting' => true,  
-            'eval' => ['tl_class' => 'w50', 'mandatory' => false],
-            'sql'  => "DECIMAL(10,2) NOT NULL default '0.00'"
-        ],
-        'excludeNote' => [
+        ], 
+        'categoryId' => array
+        (
+                'inputType'               => 'select',
+                'filter'                  => true,
+                'search'                  => true,
+                'foreignKey'              => "tl_costTravelCategory.name",                                          
+                'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
+                'sql' => ['type' => 'string', 'length' => 3, 'default' => '']
+        ),    
+        'expenseAccount' => [
             'search' => true,
             'sorting' => true,
             'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => false],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+            'eval' => ['tl_class' => 'w25', 'maxlength' => 10, 'mandatory' => true, 'unique' => true],
+            'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
         ],        
+        'costcenter' => array
+        (
+                'sorting' => true,
+                'inputType'               => 'select',
+                'filter'                  => true,
+                'search'                  => true,
+                'foreignKey'              => "tl_costcenter.CONCAT(costcenter,' [',description, ']')",              
+//                'options_callback' => [
+//                    MyFunctions::class, 'costcenter'
+//                ],                                         
+                'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
+                'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
+        ),        
         'note' => [
             'search' => true,
             'inputType' => 'text',
@@ -132,6 +140,6 @@ $GLOBALS['TL_DCA']['tl_costTravel'] = [
         ]
     ],
     'palettes' => [
-        'default' => '{legend},receiptNo,receiptDate;costcenter,category;travelReason,employee;payment,exclude,excludeNote;note'
+        'default' => '{legend},receiptNo, reportTitle, description, positionNo; payment, expenseDate; costcenter, categoryId; employee, note'
     ],
 ];

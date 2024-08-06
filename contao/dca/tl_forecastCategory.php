@@ -26,7 +26,7 @@ $GLOBALS['TL_DCA']['tl_forecastCategory'] = [
             'panelLayout' => 'search,limit'
         ],
         'label' => [
-            'fields' => ['id', 'positionNo', 'costcenter', 'category', 'function', 'note'],
+            'fields' => ['id', 'positionNo', 'costcenter', 'category', 'expenditure', 'function', 'note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -76,6 +76,11 @@ $GLOBALS['TL_DCA']['tl_forecastCategory'] = [
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
         ), 
+        'expenditure' => [
+            'inputType' => 'text',
+            'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => false],
+            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
+        ],          
         'function' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w50', 'maxlength' => 255, 'mandatory' => false],
@@ -88,6 +93,6 @@ $GLOBALS['TL_DCA']['tl_forecastCategory'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{legend}, positionNo, category, costcenter , function, note'
+        'default' => '{legend}, positionNo, category, costcenter , expenditure, function, note'
     ],
 ];
