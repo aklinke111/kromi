@@ -2,7 +2,7 @@
 
 
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/sortly/deleteFiles.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/files.php";
 
 
 // main function for calculating quantites of IVM and update table tl_sortlyTemplatesIVM
@@ -53,6 +53,7 @@ function createMySqlDump($db){
 }
 
 
+
 // Function to get table structure
 function getTableStructure($db, $table) {
     $createTable = "";
@@ -63,6 +64,8 @@ function getTableStructure($db, $table) {
     }
     return $createTable;
 }
+
+
 
 // Function to get table data
 function getTableData($db, $table) {
@@ -76,6 +79,8 @@ function getTableData($db, $table) {
     $data .= "\n";
     return $data;
 }
+
+
 
 function sendMail($backupFilePath,$backupFile,$database){
     $boundary = "";
@@ -110,42 +115,3 @@ function sendMail($backupFilePath,$backupFile,$database){
         echo 'Failed to send email';
     }
 }
-
-
-//$boundary = "";
-//$database = "xm3xbj34_kromiag";
-//
-////Delete files older threshold
-//$backupFilePath = "../db/backupMysql";
-//$msgDelete = delteFiles($backupFilePath);
-//
-//// Email headers
-//$headers = "From: Andreas Klinke <ak@kromiag.de>\r\n";
-//$headers .= "MIME-Version: 1.0\r\n";
-//$headers .= "Content-Type: multipart/mixed; boundary=\"{$boundary}\"\r\n";
-//
-//// Email body
-//
-//$body = "--{$boundary}\r\n";
-//$body .= "Content-Type: text/plain; charset=\"UTF-8\"\r\n";
-//$body .= "Content-Transfer-Encoding: 7bit\r\n\r\n";
-//$body .= "Database dump file in path '".$backupFile."' succesfully generated!\r\n\r\n";
-////$body .= "--{$boundary}\r\n";
-////$body .= "Content-Type: application/sql; name=\"$backupFile\"\r\n";
-////$body .= "Content-Transfer-Encoding: base64\r\n";
-////$body .= "Content-Disposition: attachment; filename=\"$backupFile\"\r\n\r\n";
-////$body .= $file_content . "\r\n\r\n";
-////$body .= "--{$boundary}--";
-//
-//// Recipient email
-//$to = 'aklinke111@gmail.com';
-//
-//// Email subject
-//$subject = 'Database Dump File from '.$database;
-//
-//// Send email
-//if (mail($to, $subject, $body.$msgDelete, $headers)) {
-//    echo "Backupfile ''$backupFile'' successfully created and email sent.";;
-//} else {
-//    echo 'Failed to send email';
-//}

@@ -3,25 +3,30 @@
 //https://sortlyapi.docs.apiary.io/#
 
 // Needed to return pretty JSON
-header('Content-Type: application/json');
+//header('Content-Type: application/json');
 
-// JSON payload
-echo $payload = json_encode([
-    'name'      => 'Germany999',
-    'notes'     => 'test999',
-],JSON_PRETTY_PRINT);
+function checkJSON(){
+    
+   // JSON payload
+    echo $payload = json_encode([
+        'name'      => 'Germany999',
+        'notes'     => 'test999',
+    ],JSON_PRETTY_PRINT);
 
-//Basic URL to GET sortly items
-$sortlyUrlGET = 'https://api.sortly.co/api/v1/items/';
+    //Basic URL to GET sortly items
+    $sortlyUrlGET = 'https://api.sortly.co/api/v1/items/';
 
-//Sortly item_id
-$sortlyItemId = '58672067';
+    //Sortly item_id
+    $sortlyItemId = '58672067';
 
-// Run the update
-$response = sortlyItemUpdate($sortlyUrlGET, $sortlyItemId, $payload);
+    // Run the update
+    $response = sortlyItemUpdate($sortlyUrlGET, $sortlyItemId, $payload);
 
-// Output updated item
-echo (getSortlyJSON($sortlyUrlGET, $sortlyItemId));
+    // Output updated item
+    echo (getSortlyJSON($sortlyUrlGET, $sortlyItemId));
+
+}
+
 
 
 function sortlyItemUpdate($sortlyUrlGET, $sortlyItemId, $payload){
@@ -80,7 +85,43 @@ function sortlyItemUpdate($sortlyUrlGET, $sortlyItemId, $payload){
         return $data;
     }
  
+
+
+// Update quantity
+function updatePayload($newValue){
     
+    // payload array
+    $array = [
+        'quantity' => $newValue,
+    ];
+
+    return $payload = json_encode($array,JSON_PRETTY_PRINT);
+}
+
+
+
+function singleUpdateQuantity($db, $sid, $newValue){
+    
+    $msg = "";
+    //Basic URL to GET sortly items
+    $sortlyUrlPrefix = 'https://api.sortly.co/api/v1/items/';
+    $sortlyUrlAppendix = '/?&include=custom_attributes%2Cphotos%2Coptions';
+    
+//    echo "Update";
+    // prepare the update payload
+    $payload = updatePayload($newValue);
+
+    // Run the update
+    sortlyItemUpdate($sortlyUrlPrefix, $sid, $payload);
+
+    // Output updated item
+    $msg.= getSortlyJSON($sortlyUrlPrefix, $sid, $sortlyUrlAppendix)."<p>";
+    
+    // log
+    writeLog('function: singleUpdateQuantity from sortly/calculateQuantityIVM.php', 'UPDATE', $msg, $db);
+
+    return $msg; 
+}     
 
    //// Process API response
 // $responseData = json_decode($response, true);
