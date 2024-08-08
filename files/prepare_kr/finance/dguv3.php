@@ -1,13 +1,15 @@
 <?php
 
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/_includes.php";
+
 
 function forcastDGUV3($db, $id, $forecastDate, $forecastPeriod ){
     
     $msg = "";
     $totalCost = 0;
   
-    $Period_Passed_Installations = globalVal($db, 'Period_Passed_Installations');
+    echo $Period_Passed_Installations = globalVal($db, 'Period_Passed_Installations');
 
     // lookup forestimated new customers / year for counting approaches
     
@@ -40,7 +42,6 @@ function forcastDGUV3($db, $id, $forecastDate, $forecastPeriod ){
         
         while ($row = $result->fetch_assoc()) {
            $CountInstalledIVM = $row['CountInstalledIVM'];
-    //        
         }
 
         // 1. step - calculating 

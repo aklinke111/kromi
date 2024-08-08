@@ -11,7 +11,8 @@ function forecastDate($i){
     $forecastDate->modify($modifyer);
     
     // Format the new date as 'YYYY-MM'
-    return $forecastDate = $forecastDate->format('Y-m');
+    return $forecastDate->format('Y-m');
+//    return $forecastDate = $forecastDate->format('Y-m');
 }
 
 

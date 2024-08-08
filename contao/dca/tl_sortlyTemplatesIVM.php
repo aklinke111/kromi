@@ -31,7 +31,7 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'panelLayout' => 'search,limit'
         ],
         'label' => [
-            'fields' => ['name','note','sortlyId','quantity','quantityRaw','quantityExtra','quantityForecastInstallations','quantityForecastDeinstallations','quantityOverhaul','quantityReturn','quantityProjects','quantityAvailable','quantityMinimum','sid','active'],
+            'fields' => ['name','note','sortlyId','quantity','quantityExtra','quantityMinimum','sid','active'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -105,31 +105,13 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'eval' => ['tl_class' => 'w50'],
             'sql' => "DECIMAL(10,2)",
         ],        
-        'photoUrl' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50 wizard', 'enabled' => true],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
-        ],
-        'photoName' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50 wizard', 'enabled' => true],
-            'sql' => ['type' => 'string', 'length' => 255, 'default' => '']
-        ],
+        
        'quantityOverAll' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'enabled' => false],
             'sql' => "INT(10)",
         ],         
-       'quantityOrderedExternal' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'enabled' => false],
-            'sql' => "INT(10)",
-        ],    
-       'quantityOrderedInternal' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'enabled' => false],
-            'sql' => "INT(10)",
-        ],         
+     
        'quantity' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'enabled' => false],
@@ -140,41 +122,8 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'eval' => ['tl_class' => 'w25', 'enabled' => false],
             'sql' => "INT(10)",
         ],   
-       'quantityRaw' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'enabled' => false],
-            'sql' => "INT(10)",
-        ], 
-        'quantityAvailable' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'enabled' => false],
-            'sql' => "INT(10)",
-        ],        
-        'quantityForecastInstallations' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'enabled' => true],
-            'sql' => "INT(10)",
-        ],
-       'quantityForecastDeinstallations' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'enabled' => false],
-            'sql' => "INT(10)",
-        ],         
-        'quantityOverhaul' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'enabled' => false],
-            'sql' => "INT(10)",
-        ],
-        'quantityProjects' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'enabled' => false],
-            'sql' => "INT(10)",
-        ],
-       'quantityReturn' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w25', 'enabled' => false],
-            'sql' => "INT(10)",
-        ], 
+     
+       
         'quantityMinimum' => [
             'inputType' => 'text',
             'eval' => ['tl_class' => 'w25', 'enabled' => true],
@@ -213,13 +162,9 @@ $GLOBALS['TL_DCA']['tl_sortlyTemplatesIVM'] = [
             'search'                  => true,
             'sql' => ['type' => 'boolean','default' => false]
         ],          
-        'created' => [
-            'inputType' => 'text',
-            'eval' => ['tl_class' => 'w50 wizard','enabled' => true],
-            'sql' => ['type' => 'string', 'length' => 50, 'notnull' => false]
-        ],
+       
     ],
     'palettes' => [
-        'default' => '{sortlyTemplatesIVM},name,sortlyId;photoUrl,photoName;quantityExtra,quantityForecastDeinstallations,quantityForecastInstallations,quantityMinimum;created,sid,pid,active,financeReport,note'
+        'default' => '{sortlyTemplatesIVM},name,sortlyId;quantityExtra,quantityMinimum;sid,pid,active,financeReport,note'
     ],
 ];

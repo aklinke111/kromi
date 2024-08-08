@@ -1,19 +1,19 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
 
-include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/sql.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/date.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/calculate.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/_includes.php";
 
-include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/stats/financeStats.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/stats/sortlyStats.php";
 
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/dguv3.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/abcAnalyses.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/pendingOrders.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/payments.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/financeStats.php";
 
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/sortly/ivmBomDisplayAndUpdate.php";
+
+
 
 if (isset($_GET['webhookFunction'])) {
 
