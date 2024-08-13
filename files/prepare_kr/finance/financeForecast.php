@@ -1,16 +1,9 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
-
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/_includes.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/_includes.php";
 
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/stats/sortlyStats.php";
-
-include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/dguv3.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/abcAnalyses.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/pendingOrders.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/payments.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/financeStats.php";
-
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/sortly/ivmBomDisplayAndUpdate.php";
 
 
@@ -53,8 +46,8 @@ function financeForecast_main($db){
     $msg .= "DGUV3 price per approach: ".$DGUV3_PricePerApproach."<br>";
     
     // lookup period of passed IVM installations 
-    $Period_Passed_Installations = globalVal($db, 'Period_Passed_Implementations');
-    $msg .= "Period in months for considering German installations. ".$Period_Passed_Installations."<br>"; 
+    $HistoryPeriod = globalVal($db, 'HistoryPeriod');
+    $msg .= "Period in months for considering German installations. ".$HistoryPeriod."<br>"; 
     
     $msg .=  "---------------------------------------------------------------------- <p>";
     
@@ -83,11 +76,11 @@ function financeForecast_main($db){
     
     for ($i = 0; $i <= ($ForecastPeriod-1); $i++) {
 
-    $forecastDate =  forecastDate($i); //files/prepare_kr/src/functions/date.php
-    
-    $msg .= "<b>Forecast Year-Month: " . $forecastDate. "</b><br>";
-    
-    addEntriesToTable($db, $forecastDate, $ForecastPeriod);
+        $forecastDate =  forecastDate($i); //files/prepare_kr/src/functions/date.php
+
+        $msg .= "<b>Forecast Year-Month: " . $forecastDate. "</b><br>";
+
+        addEntriesToTable($db, $forecastDate, $ForecastPeriod);
     }
 }
 
@@ -111,122 +104,58 @@ function addEntriesToTable($db, $forecastDate, $ForecastPeriod){
 //         echo $functionName($db, $id, $forecastDate, $ForecastPeriod);
         switch ($id) {
         case 1:
+            echo shipping($db, $id, $forecastDate, $ForecastPeriod);
             break;
         case 2:
         //calculate monthly total for all IVM
-            echo forcastTotalCostIVM($db, $id, $forecastDate, $ForecastPeriod);
-            break;                
+            echo forecastTotalCostIVM($db, $id, $forecastDate, $ForecastPeriod);
+            break;  
+        case 4:
+            echo workwear($db, $id, $forecastDate, $ForecastPeriod);
+            break;        
         case 5:
             echo forcastDGUV3($db, $id, $forecastDate, $ForecastPeriod);
             break;
+        case 11:
+            echo travelling($db, $id, $forecastDate, $ForecastPeriod);
+            break;        
         case 12:
             echo pendingOrdersByDateMonth($db, $id, $forecastDate, $ForecastPeriod, 'external');
             break;  
+        case 13:
+            // region = South America = 2           
+            echo totalCostFacelift($db, $id, $forecastDate, 2);
+            break;          
         case 16:
             echo pendingOrdersByDateMonth($db, $id, $forecastDate, $ForecastPeriod, 'internal');
             break;          
-        case 13:
-            echo totalCostFacelift($db, $id, $forecastDate, $ForecastPeriod);
-            break;  
         case 17:
             echo paymentsHeliotronic($db, $id, $forecastDate, $ForecastPeriod, '1'); // maintenance and updates
             break;  
-        case 20:
-            echo paymentsHeliotronic($db, $id, $forecastDate, $ForecastPeriod, '2'); // single licence fee
-            break;  
         case 18:
-            echo paymentsHeliotronic($db, $id, $forecastDate, $ForecastPeriod, '3'); // TCWeb SAAS
-            break;  
+            echo paymentsHeliotronic($db, $id, $forecastDate, $ForecastPeriod, '5'); // Features and support
+            break; 
         case 19:
             echo paymentsHeliotronic($db, $id, $forecastDate, $ForecastPeriod, '4'); // TCMobile
             break; 
-        case 17:
-            echo paymentsHeliotronic($db, $id, $forecastDate, $ForecastPeriod, '5'); // Features and support
-            break;           
+        case 20:
+            echo paymentsHeliotronic($db, $id, $forecastDate, $ForecastPeriod, '2'); // single licence fee
+            break;  
+        case 21:
+            echo paymentsHeliotronic($db, $id, $forecastDate, $ForecastPeriod, '3'); // TCWeb SAAS
+            break;  
+        case 23:
+            // region = Europe = 1
+            echo totalCostFacelift($db, $id, $forecastDate, 1);
+            break;         
         default:
         }
     }
 }
 
 
-
-function totalCostFacelift($db, $id, $forecastDate, $ForecastPeriod){
-
-    $msg = "";
-    $totalPerMonth = 0;
-
-    $modelIds = "16, 17, 18"; // Facelift models
-    $totalAllDevices = calculationCostModels($db, $modelIds);
-    
-    $dateEndOfFacelift = globalVal($db, 'EndOfFaceliftMeasures');
-    $countMonthEndOfFaceliftMeasures = getMonthsToDate($dateEndOfFacelift);
-    
-
-    $date = date_create($dateEndOfFacelift);
-    $date_1 = date_format($date,"Y-m");
-    $date_2 = $forecastDate;
-    
-    // Dieser Betrag wird nur über die Laufzeit in Monaten hinzugefügt, danach wird er zu 0
-    $answer = compareMonthYear($date_1, $date_2);
-    
-    if($answer == "higher date"){
-        $totalPerMonth = Round(($totalAllDevices / $countMonthEndOfFaceliftMeasures),2);
-    } 
-
-    // Insert
-    $sql = "INSERT INTO kr_forecastEngineering (tstamp, forecastDate, categoryId, cost) VALUES (".time().", '$forecastDate', $id, $totalPerMonth)";
-    if($result = $db->query($sql)){
-    $msg .= "Monthly cost for KTC-facelifts of $totalPerMonth € for forecast date $forecastDate and forecast period of $countMonthEndOfFaceliftMeasures months inserted successfully in table 'kr_forecastEngineering'<p>";
-    }
-    
-    return $msg;
-}
-
-
-
 function truncateForecast($db){
         // truncate table 'bomCalculations'
     $sql = "TRUNCATE TABLE kr_forecastEngineering";
-    $result = $db->query($sql);
-}
-
-
-
-function forcastTotalCostIVM($db, $id, $forecastDate, $ForecastPeriod){
-    
-    $msg = "";
-    $totalCost = 0;
-    
-    // IVMs KROMI facelift
-    $modelIdsFacelift = "16, 17, 18";
-     $totalCost += $totalCostFacelifts = calculationCostModels($db, $modelIdsFacelift);
-    
-    // IVMs purchse
-    $modelIdsPurchase = "3, 4, 8, 9, 10, 11, 12";
-    $totalCost += $totalCostPurchase =  calculationCostModels($db, $modelIdsPurchase);
-    
-    // IVMs KROMI new
-    $modelIdsNew = "2, 5";
-    $totalCost += $totalCostKromiNew = calculationCostModels($db, $modelIdsNew);
-    
-    // stock
-    $stockValue = stockValue($db);
-
-  // Monthly costs 
-     $monthlyCost = ($totalCostKromiNew - $stockValue) / $ForecastPeriod;
-   
-   // Insert
-    $sql = "INSERT INTO kr_forecastEngineering (tstamp, forecastDate, categoryId, cost) VALUES (".time().", '$forecastDate', $id, $monthlyCost)";
-    if($result = $db->query($sql)){
-        $totalCost = number_format($totalCost,2);
-        $monthlyCost = number_format($monthlyCost,2);
-        $msg .= "Monthly cost of  $monthlyCost € (total cost of $totalCost €) for forecast date $forecastDate and forecast period of $ForecastPeriod months inserted successfully in table 'kr_forecastEngineering'<br>";
-    }
-    $whereClause = "";
-    $pendingOrders = number_format(pendingOrders($db, $whereClause, $ForecastPeriod), 2);
-    $msg .= "Pending orders of $pendingOrders €<p>";
-    
-    $msg .= "Total cost for all IVMs of $totalCost €<p>";
-    
-   return $msg;
+    $db->query($sql);
 }

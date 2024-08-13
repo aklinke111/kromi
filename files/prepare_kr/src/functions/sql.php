@@ -55,7 +55,7 @@ function buildPivotSql(){
     
     $sql .= "FROM kr_forecastEngineering 
             JOIN tl_forecastCategory ON tl_forecastCategory.id = categoryId 
-            GROUP BY categoryId 
+            GROUP BY categoryId
             ORDER by positionNo ";
     
     return $sql;

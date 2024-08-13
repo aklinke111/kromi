@@ -97,6 +97,10 @@ $GLOBALS['BE_MOD']['misc.']['notes'] = array
 (
 	'tables' => array('tl_notes')
 );
+$GLOBALS['BE_MOD']['misc.']['kpi'] = array
+(
+	'tables' => array('tl_kpi')
+);
 
 //----------------------------------------------------
 
@@ -115,6 +119,9 @@ $GLOBALS['BE_MOD']['dimensions']['notesCategory'] = [
 ];
 $GLOBALS['BE_MOD']['dimensions']['globalsCategory'] = [
     'tables' => ['tl_globalsCategory'],
+];
+$GLOBALS['BE_MOD']['dimensions']['kpiCategory'] = [
+    'tables' => ['tl_kpiCategory'],
 ];
 
 //----------------------------------------------------

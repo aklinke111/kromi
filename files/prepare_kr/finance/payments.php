@@ -3,6 +3,7 @@
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
 
 function paymentsHeliotronic($db, $id, $forecastDate, $ForecastPeriod, $categoryId){
+    
     $msg = "";
     $HistoryPeriod = globalVal($db, 'HistoryPeriod');
 

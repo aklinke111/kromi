@@ -3,7 +3,6 @@
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
 
 
-
 function totalPriceFromBOM($db){
     // Summe der benötigten Teile laut BOM
 

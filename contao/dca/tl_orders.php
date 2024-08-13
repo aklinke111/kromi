@@ -32,7 +32,7 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'panelLayout' => 'search,limit,sort'
         ],
         'label' => [
-            'fields' => ['supplierId','sortlyId','bySideOrder','invoiceNoDMS','invoiceDate','supplierArticleNo','orderQuantity', 'price','discount','surcharge','vat','orderDate', 'estimatedDeliveryDate', 'delivered', 'capex', 'note'],
+            'fields' => ['supplierId','customerId','sortlyId','bySideOrder','invoiceNoDMS','invoiceDate','supplierArticleNo','orderQuantity', 'price','discount','surcharge','vat','orderDate', 'estimatedDeliveryDate', 'delivered', 'capex', 'calculated','note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -56,6 +56,9 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
         'id' => [
             'sql' => ['type' => 'integer', 'unsigned' => true, 'autoincrement' => true],
         ],
+        'tstamp' => [
+            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
+        ],        
         'supplierId' => [
             'inputType'               => 'select',
             'filter'                  => true,
@@ -65,9 +68,16 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
             'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),            
             'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
         ],
-        'tstamp' => [
-            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 0]
-        ],
+        'customerId' => [
+            'inputType'               => 'select',
+            'filter'                  => true,
+            'search'                  => true, 
+            'sorting'                 => true,            
+            'foreignKey'              => 'tl_customer.name',
+            'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),            
+            'sql' => ['type' => 'integer', 'unsigned' => true, 'default' => 147]
+        ],        
+
         'sortlyId' => [
             'inputType' => 'select',
             'filter'                  => true,
@@ -199,6 +209,6 @@ $GLOBALS['TL_DCA']['tl_orders'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{article_legend},sortlyId;{suppliers_legend},bySideOrder,supplierId,supplierArticleNo;{orders_legend};orderQuantity,packageUnit,price;discount,surcharge;orderDate,estimatedDeliveryDate,invoiceDate,invoiceNoDMS;{delivery_legend},internalExternal;calculated,vat,vatIncluded,priceUpdate,delivered,capex;{note_legend:hide},note'
+        'default' => '{article_legend},sortlyId;{suppliers_legend},bySideOrder,supplierId,supplierArticleNo,customerId;{orders_legend};orderQuantity,packageUnit,price;discount,surcharge;orderDate,estimatedDeliveryDate,invoiceDate,invoiceNoDMS;{delivery_legend},internalExternal;calculated,vat,vatIncluded,priceUpdate,delivered,capex;{note_legend:hide},note'
     ],
 ];

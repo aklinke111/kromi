@@ -34,7 +34,9 @@ function lookupQuantityOverAll($db){
         sortly.name,
         tl_sortlyTemplatesIVM.id,
         tl_region.name    
-    ";
+    Order By
+    regionId,
+    tl_sortlyTemplatesIVM.id";
     $result = $db->query($sql);
     
     while($item = $result->fetch_assoc()){ 

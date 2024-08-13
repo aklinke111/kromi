@@ -46,7 +46,10 @@ Where
     $whereClause
 Group By
     tl_sortlyTemplatesIVM.name,
-    tl_region.id";
+    tl_region.id
+Order By
+    regionId,
+    tl_sortlyTemplatesIVM.id";
 //    die();
     $result = $db->query($sql);
 
@@ -54,23 +57,78 @@ Group By
         $regionName = $item['regionName'];
         $regionId = $item['regionId'];        
         $id = $item['id'];
-        $quantity = $item['quantity'];
+        $quantityFromHistory = $item['quantity'];
+        
+        // compare quantities from lookback in history with quantity in projects waiting for contract
+        $quantity = lookupForecast($db, $id, $quantityFromHistory, $regionId);
         
         if($removeInstall == 'Remove'){
             $quantity *= -1;
         }
 
         // factor
-        $factor = $ForecastPeriod / $HistoryPeriod;
-        $quantity *= $factor;
+//        $factor = $ForecastPeriod / $HistoryPeriod;
+//        $quantity_24 = $quantity * $factor;
         $exclude = 0;
         $quantityName = "quantityForecastInstallations".$removeInstall;
-        $note = "period of $factor * $HistoryPeriod months in $regionName [$exclude]";
+        $note = "period of $HistoryPeriod months in $regionName [$exclude]";
 
         $msg .= insertQuantity($db, $id, $quantityName, $quantity, $note, $exclude, $regionId);
         $msg .= "<br>";
     } 
     return $msg;
+}
+
+
+function lookupForecast($db, $idMain, $quantityFromHistory, $regionId){
+    
+    $sql = "Select
+        tl_sortlyTemplatesIVM.name As model,
+        tl_sortlyTemplatesIVM.id As id,
+        Count(tl_toolcenterProjectComponents.id) As quantity,
+        tl_region.name As regionName,
+        tl_region.id As regionId
+    From
+        tl_toolcenterProjectCategory Inner Join
+        tl_toolcenterProjects On tl_toolcenterProjectCategory.id = tl_toolcenterProjects.projectCategory Inner Join
+        tl_toolcenterProjectStatus On tl_toolcenterProjectStatus.id = tl_toolcenterProjects.projectStatus Inner Join
+        tl_toolcenterProjectComponents On tl_toolcenterProjects.id = tl_toolcenterProjectComponents.pid Inner Join
+        tl_sortlyTemplatesIVM On tl_sortlyTemplatesIVM.id = tl_toolcenterProjectComponents.componentModel Inner Join
+        tl_country On tl_toolcenterProjects.countryId = tl_country.id Inner Join
+        sortly_country On sortly_country.sid = tl_country.sid Inner Join
+        tl_country2Region On sortly_country.id = tl_country2Region.countryId Inner Join
+        tl_region On tl_country2Region.regionId = tl_region.id
+    Where
+        tl_toolcenterProjectComponents.`usage` Like 'install' And
+        tl_toolcenterProjects.projectDateFinished Between CurDate() And CurDate() + Interval 12 Month And
+        tl_toolcenterProjectStatus.status Like 'waiting%' And
+        tl_toolcenterProjectCategory.category Like 'implementation' and
+        tl_sortlyTemplatesIVM.id = $idMain and
+        tl_region.id = $regionId   
+    Group By
+        tl_sortlyTemplatesIVM.name,
+        tl_region.id
+    order by
+        tl_region.id";
+   $result = $db->query($sql);
+    
+    if($result->num_rows >0){ 
+        
+        while($item = $result->fetch_assoc()){ 
+              $quantity = $item['quantity'];
+              // if quantity from contracts > than statistical qunatity...
+            if($quantity > $quantityFromHistory){ 
+                return $quantityFromHistory + $quantity; // add it to 12 momths historic quantity
+            } else {
+               return $quantity + $quantity; // double up the quntities to reach 24 months
+            }
+        }
+    }else{
+        return $quantityFromHistory + $quantityFromHistory;
+    }
+        
+    
+
 }
 
 

@@ -21,10 +21,7 @@ if (isset($_GET['webhookFunction'])) {
         
         echo globals($db);
         echo "<p>";  
-        
-        echo lookupQuantityOverAll($db);
-        echo "<p>"; 
-        
+
         echo orderedIVM($db);
         echo "<p>";            
 
@@ -40,8 +37,8 @@ if (isset($_GET['webhookFunction'])) {
             
         echo quantityOnStockIVM($db, 1);
         echo "<p>";  
-        echo quantityOnStockIVM($db, 0);
-        echo "<p>";  
+//        echo quantityOnStockIVM($db, 0);
+//        echo "<p>";  
         echo calculateRawIvmOnStock($db);
         echo "<p>";  
         
@@ -53,6 +50,9 @@ if (isset($_GET['webhookFunction'])) {
         echo totalNeededQuantity($db, 'New');
         echo "<p>"; 
         echo totalNeededQuantity($db, 'Facelift');
+        echo "<p>"; 
+        
+        echo lookupQuantityOverAll($db);
         echo "<p>"; 
     }
 }  

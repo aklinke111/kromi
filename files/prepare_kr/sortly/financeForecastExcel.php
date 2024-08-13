@@ -4,7 +4,8 @@
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
 
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/_includes.php";
-include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/excel/financeExcel.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/excelCalculations/f2/_includes.php";
+
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/abcAnalyses.php";
 
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/sortly/ivmBomDisplayAndUpdate.php";

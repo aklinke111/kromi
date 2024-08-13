@@ -4,12 +4,15 @@ include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/_includes.php";
 
 
+
+
+
 function forcastDGUV3($db, $id, $forecastDate, $forecastPeriod ){
     
     $msg = "";
     $totalCost = 0;
   
-    echo $Period_Passed_Installations = globalVal($db, 'Period_Passed_Installations');
+    $HistoryPeriod = globalVal($db, 'HistoryPeriod');
 
     // lookup forestimated new customers / year for counting approaches
     
@@ -34,7 +37,7 @@ function forcastDGUV3($db, $id, $forecastDate, $forecastPeriod ){
         tl_toolcenterProjects.ktcId Not Like 'KTC-000' And
         sortly_country.name = 'Germany' And
         tl_toolcenterProjectCategory.category In ('implementation', 'change configuration') And
-        tl_toolcenterProjects.projectDateFinished BETWEEN CURDATE() - INTERVAL $Period_Passed_Installations MONTH AND CURDATE() And
+        tl_toolcenterProjects.projectDateFinished BETWEEN CURDATE() - INTERVAL $HistoryPeriod MONTH AND CURDATE() And
         tl_toolcenterProjectComponents.`usage` = 'install'
     Group By
         sortly_country.name";
@@ -45,7 +48,7 @@ function forcastDGUV3($db, $id, $forecastDate, $forecastPeriod ){
         }
 
         // 1. step - calculating 
-        $totalDevices = $CountInstalledIVM / $Period_Passed_Installations;
+        $totalDevices = $CountInstalledIVM / $HistoryPeriod;
         
         $totalCost += round($totalDevices,0) * globalVal($db, 'DGUV3_PricePerIVM');
         

@@ -28,7 +28,7 @@ $GLOBALS['TL_DCA']['tl_toolcenterProjects'] = [
             'panelLayout' => 'search,limit,sort'
         ],
         'label' => [
-            'fields' => ['id','ktcId','projectDatePlanned','projectDateFinished','projectCategory','projectStatus','note'],
+            'fields' => ['id','ktcId','countryId','projectDatePlanned','projectDateFinished','projectCategory','projectStatus','note'],
             'format' => '%s',
             'showColumns' => true,
         ],
@@ -86,6 +86,16 @@ $GLOBALS['TL_DCA']['tl_toolcenterProjects'] = [
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
         ), 
+        'countryId' => array
+        (
+                'inputType'               => 'select',
+                'filter'                  => true,
+                'search'                  => true,   
+                'sorting'                 => true,
+                'foreignKey'              => "tl_country.name",                                          
+                'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
+                'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
+        ),        
         'projectCategory' => array
         (
                 'inputType'               => 'select',
@@ -154,36 +164,6 @@ $GLOBALS['TL_DCA']['tl_toolcenterProjects'] = [
         ],
     ],
     'palettes' => [
-        'default' => '{toolcenterProjects_legend},ktcId,employeeResponsible;projectCategory,projectStatus,projectDatePlanned,projectDateFinished;travelExpense,probability,singleSRC,note'
+        'default' => '{toolcenterProjects_legend},ktcId,countryId,employeeResponsible;projectCategory,projectStatus,projectDatePlanned,projectDateFinished;travelExpense,probability,singleSRC,note'
     ],
 ];
-
-
-
-//class tl_toolcenterProjects extends Backend
-//{
-//    public function ktcId()
-//    {
-//        //\System::log('The e-mail was sent successfully', __METHOD__, TL_GENERAL);
-//        $value = array();   
-////        $sql = "SELECT DISTINCT id, sid, name FROM sortly_ktc WHERE name LIKE 'KTC-%' ORDER BY name";
-//        
-//        $sql = "Select
-//                    sortly_ktc.name As ktc,
-//                    sortly_customer.name As customer
-//                From
-//                    sortly_customer Inner Join
-//                    sortly_ktc On sortly_customer.sid = sortly_ktc.pid
-//                Where
-//                    sortly_ktc.name Like 'KTC-%'
-//                Order By
-//                    ktc";
-//        
-//        $result = $this->Database->prepare($sql)->execute();
-//            while($result->next())
-//            {
-//                $value[$result->ktc] = $result->ktc.' - '.$result->customer;
-//            }
-//        return $value;
-//    }
-//}

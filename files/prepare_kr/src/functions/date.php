@@ -1,6 +1,6 @@
 <?php
 
-// tl_toolcenterProjects.projectDateFinished BETWEEN CURDATE() - INTERVAL $Period_Passed_Installations MONTH AND CURDATE()
+// tl_toolcenterProjects.projectDateFinished BETWEEN CURDATE() - INTERVAL $HistoryPeriod MONTH AND CURDATE()
 
 function forecastDate($i){
     // Create a DateTime object for the current date
