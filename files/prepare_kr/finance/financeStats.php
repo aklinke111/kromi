@@ -23,26 +23,26 @@ function totalPriceFromBOM($db){
 }
 
 
-function calculationCostModels($db, $modelIds){
+
+function lookupNameRegion($db, $regionId){
     
-    $totalAllDevices = 0;
-        
-    $sql = "Select
-        tl_sortlyTemplatesIVM.name As model,
-        tl_sortlyTemplatesIVM.id As id,
-        tl_sortlyTemplatesIVM.price,
-        tl_sortlyTemplatesIVM.quantity,
-        (tl_sortlyTemplatesIVM.price * tl_sortlyTemplatesIVM.quantity) AS totalPerModel
-    FROM 
-        tl_sortlyTemplatesIVM
-    Where
-        tl_sortlyTemplatesIVM.id IN ($modelIds)";
+    $sql = "Select name from tl_region WHERE id = $regionId";
     $result = $db->query($sql);
     
-    // iterate price and quantity needed for each IVM-model
-    while ($row = $result->fetch_assoc()) {
-        $totalPerModel = $row['totalPerModel'];
-        $totalAllDevices += $totalPerModel;
-    }   
-    return $totalAllDevices;
+    while($item = $result->fetch_assoc()){ 
+        return $item['name'];
+    }
+}
+
+
+function regionsToArray($db){
+    $arrayRegions = array();
+    
+    $sql = "Select id from tl_region";
+    $result = $db->query($sql);
+    
+    while($item = $result->fetch_assoc()){ 
+        $arrayRegions[] = $item['id'];
+    }
+    return $arrayRegions;
 }

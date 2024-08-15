@@ -41,27 +41,3 @@ function insertHours($db, $id_ivm, $quantityName, $quantity, $note, $exclude, $r
     }
  
 }
-
-
-function regionsToArray($db){
-    $arrayRegions = array();
-    
-    $sql = "Select id from tl_region";
-    $result = $db->query($sql);
-    
-    while($item = $result->fetch_assoc()){ 
-        $arrayRegions[] = $item['id'];
-    }
-    return $arrayRegions;
-}
-
-
-function lookupNameIVM($db, $id_ivm){
-    
-    $sql = "Select name from tl_sortlyTemplatesIVM WHERE id = $id_ivm";
-    $result = $db->query($sql);
-    
-    while($item = $result->fetch_assoc()){ 
-        return $item['name'];
-    }
-}

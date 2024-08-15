@@ -5,7 +5,7 @@ include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/_includes.php"
 
 
 
-function totalCostFacelift($db, $id, $forecastDate, $regionId){
+function costFaceliftIVM($db, $id, $forecastDate, $regionId){
 
     $msg = "";
     $totalPerMonth = 0;
@@ -18,7 +18,7 @@ function totalCostFacelift($db, $id, $forecastDate, $regionId){
         tl_sortlyTemplatesIVM On tl_sortlyTemplatesIVM.id = kr_quantityIVM.id_ivm Inner Join
         tl_region On kr_quantityIVM.regionId = tl_region.id
     Where
-        kr_quantityIVM.quantityName Like 'quantityTotalFacelift' And
+        kr_quantityIVM.quantityName Like 'quantityProjects_install_facelift' And
         kr_quantityIVM.regionId = $regionId
     ";
     $result = $db->query($sql);
@@ -60,37 +60,3 @@ function totalCostFacelift($db, $id, $forecastDate, $regionId){
     
     return $msg;
 }
-
-
-
-//function totalCostFacelift($db, $id, $forecastDate, $ForecastPeriod){
-//
-//    $msg = "";
-//    $totalPerMonth = 0;
-//
-//    $modelIds = "16, 17, 18"; // Facelift models
-//    $totalAllDevices = calculationCostModels($db, $modelIds);
-//    
-//    $dateEndOfFacelift = globalVal($db, 'EndOfFaceliftMeasures');
-//    $countMonthEndOfFaceliftMeasures = getMonthsToDate($dateEndOfFacelift);
-//    
-//
-//    $date = date_create($dateEndOfFacelift);
-//    $date_1 = date_format($date,"Y-m");
-//    $date_2 = $forecastDate;
-//    
-//    // Dieser Betrag wird nur über die Laufzeit in Monaten hinzugefügt, danach wird er zu 0
-//    $answer = compareMonthYear($date_1, $date_2);
-//    
-//    if($answer == "higher date"){
-//        $totalPerMonth = Round(($totalAllDevices / $countMonthEndOfFaceliftMeasures),2);
-//    } 
-//
-//    // Insert
-//    $sql = "INSERT INTO kr_forecastEngineering (tstamp, forecastDate, categoryId, cost) VALUES (".time().", '$forecastDate', $id, $totalPerMonth)";
-//    if($result = $db->query($sql)){
-//    $msg .= "Monthly cost for KTC-facelifts of $totalPerMonth € for forecast date $forecastDate and forecast period of $countMonthEndOfFaceliftMeasures months inserted successfully in table 'kr_forecastEngineering'<p>";
-//    }
-//    
-//    return $msg;
-//}

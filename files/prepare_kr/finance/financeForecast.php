@@ -1,5 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
+
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/_includes.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/_includes.php";
 
@@ -23,12 +24,14 @@ if (isset($_GET['webhookFunction'])) {
 
 function financeForecast_main($db){
 
+    $sql = "TRUNCATE TABLE kr_forecastEngineering";
+    $db->query($sql);
     $msg = "";
-        
-    $msg .= buildPivotSql()."<p>";
+
+    echo  buildPivotSql($db)."<p>";
+
+    $msg .= personnelCostIVMs($db);
     
-    $msg .= truncateForecast($db);
-   
     // lookup ForecastPeriod
     $ForecastPeriod = globalVal($db, 'ForecastPeriod');
     $msg .= "Forecast period: $ForecastPeriod months<br>";
@@ -51,40 +54,15 @@ function financeForecast_main($db){
     
     $msg .=  "---------------------------------------------------------------------- <p>";
     
-
-    // IVMs KROMI facelift
-    $modelIdsFacelift = "16, 17, 18";
-    $msg .= "IVMs KROMI facelift: ".number_format(calculationCostModels($db, $modelIdsFacelift),2)."<br>";
-     
-    // IVMs KROMI new
-    $modelIdsNew = "2, 5";
-    $msg .= "IVMs KROMI new: ".number_format(calculationCostModels($db, $modelIdsNew),2)."<br>";
-    
-    // IVMs ordered 
-    $whereClause = "And sortly.IVM = 1 ";
-    $msg .= "IVMs ordered: ".number_format(pendingOrders($db, $whereClause, $ForecastPeriod), 2)."<br>";
-    
-    // Stock value
-    $msg .= "Total value of material on stock: ".number_format(stockValue($db,), 2)."<br>";
-    
-    $msg .=  "---------------------------------------------------------------------- <p>";
-//    $msg .=  "<p>";
-    
-    $msg .= "Total costs for all needed parts from BOM list <b>: ".number_format(totalPriceFromBOM($db),2)." €</b><p>";
-
-    echo $msg;
-    
     for ($i = 0; $i <= ($ForecastPeriod-1); $i++) {
 
-        $forecastDate =  forecastDate($i); //files/prepare_kr/src/functions/date.php
-
+        $forecastDate =  forecastDate($i);
         $msg .= "<b>Forecast Year-Month: " . $forecastDate. "</b><br>";
 
         addEntriesToTable($db, $forecastDate, $ForecastPeriod);
     }
+    return $msg;
 }
-
-
 
 function addEntriesToTable($db, $forecastDate, $ForecastPeriod){
 
@@ -94,22 +72,17 @@ function addEntriesToTable($db, $forecastDate, $ForecastPeriod){
     // iterate price and quantity needed for each IVM-model
     while ($row = $result->fetch_assoc()) {
         $id = $row['id'];
-//        $functionName = $row['function'];
-//        echo $functionName."<br>";
-        
-//        if (function_exists($functionName)) {
-//            echo $functionName($db, $id, $forecastDate, $ForecastPeriod);
-//            break;
-//        }
-//         echo $functionName($db, $id, $forecastDate, $ForecastPeriod);
+
         switch ($id) {
         case 1:
             echo shipping($db, $id, $forecastDate, $ForecastPeriod);
             break;
         case 2:
-        //calculate monthly total for all IVM
-            echo forecastTotalCostIVM($db, $id, $forecastDate, $ForecastPeriod);
+            echo costNewIVM($db, $id, $forecastDate, 1);
             break;  
+        case 26:
+            echo costNewIVM($db, $id, $forecastDate, 2);
+            break;         
         case 4:
             echo workwear($db, $id, $forecastDate, $ForecastPeriod);
             break;        
@@ -124,7 +97,7 @@ function addEntriesToTable($db, $forecastDate, $ForecastPeriod){
             break;  
         case 13:
             // region = South America = 2           
-            echo totalCostFacelift($db, $id, $forecastDate, 2);
+            echo costFaceliftIVM($db, $id, $forecastDate, 2);
             break;          
         case 16:
             echo pendingOrdersByDateMonth($db, $id, $forecastDate, $ForecastPeriod, 'internal');
@@ -143,19 +116,33 @@ function addEntriesToTable($db, $forecastDate, $ForecastPeriod){
             break;  
         case 21:
             echo paymentsHeliotronic($db, $id, $forecastDate, $ForecastPeriod, '3'); // TCWeb SAAS
-            break;  
+            break; 
+        case 22:
+            echo paymentsSoftwareSortly($db, $id, $forecastDate, $ForecastPeriod, '3'); // TCWeb SAAS
+            break;          
         case 23:
             // region = Europe = 1
-            echo totalCostFacelift($db, $id, $forecastDate, 1);
-            break;         
+            echo costFaceliftIVM($db, $id, $forecastDate, 1);
+            break;   
+        case 24:
+            echo personnelNewIVM($db, $id, $forecastDate, 1);
+            break;
+        case 25:
+            echo personnelNewIVM($db, $id, $forecastDate, 2);
+            break;          
+        case 27:
+            echo personellFaceliftIVM($db, $id, $forecastDate, 1);
+            break;
+        case 28:
+            echo personellFaceliftIVM($db, $id, $forecastDate, 2);
+            break; 
+        case 29:
+            echo materialOnStock($db, $id, $forecastDate, $ForecastPeriod, '58670984'); // Europe
+            break; 
+        case 30:
+            echo materialOnStock($db, $id, $forecastDate, $ForecastPeriod, '71412763'); // South America
+            break;           
         default:
         }
     }
-}
-
-
-function truncateForecast($db){
-        // truncate table 'bomCalculations'
-    $sql = "TRUNCATE TABLE kr_forecastEngineering";
-    $db->query($sql);
 }

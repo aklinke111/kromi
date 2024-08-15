@@ -51,8 +51,21 @@ include_once '_includes.php';
         $regionId = $item['regionId'];   
 
         $quantityName = "quantityOrdered".$internalExternal;
-        $exclude = 0;        
+         
+//        // Internal orders are considered, external not
+//        if($internalExternal == 'internal'){
+//            $exclude = 0;   
+//        } else{
+//            $exclude = 1; 
+//        }
+        
+        $exclude = 1; 
+
         $note = $internalExternal." order with forecast period of ".$ForecastPeriod." months $regionName [$exclude]";
+        
+        // overwrite  Helix Master (5 to 17) and Slave (2 to 16) to assign Facelift ids - DELETE after facelift measures!
+        if($id == 5){$id = 17;}
+        if($id == 2){$id = 16;}
 
         $msg .= insertQuantity($db, $id, $quantityName, $quantityOrdered, $note, $exclude, $regionId);
         $msg .= "<br>";

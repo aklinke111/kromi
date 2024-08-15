@@ -105,7 +105,7 @@ function forecast($db, $ForecastPeriod){
     // Write header row -------------------------
 
     // query string
-    $sql = buildPivotSql();
+    $sql = buildPivotSql($db);
     
     // extract titles from string of pivot-query
     $titles = extract_titles_from_sql($sql);

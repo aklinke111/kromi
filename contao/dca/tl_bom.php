@@ -155,7 +155,7 @@ class tl_bom extends Backend
     {
         //\System::log('The e-mail was sent successfully', __METHOD__, TL_GENERAL);
         $value = array();        
-        $result = $this->Database->prepare("SELECT DISTINCT sortlyId, name FROM sortly WHERE pid IN(58670984,73134913) ORDER BY sortlyId")
+        $result = $this->Database->prepare("SELECT DISTINCT sortlyId, name FROM sortly WHERE pid IN(58670984,73134913,72430051) ORDER BY sortlyId")
                                  ->execute();
         while($result->next())
         {

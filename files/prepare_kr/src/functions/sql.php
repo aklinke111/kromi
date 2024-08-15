@@ -1,5 +1,6 @@
 <?php
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php"; 
+//include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/globals.php";
 
 //function globalVal($db, $var){
 //    
@@ -14,9 +15,12 @@ include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
 //}
 
 
-function buildPivotSql(){
+function buildPivotSql($db){
+    
+    $ForecastPeriod = globalVal($db, 'ForecastPeriod');
     
     $sqlPivot = "";
+    $sqlPivot .= "SUM(cost) AS 'Total 24 months', ";
     
     // Loop years
     for ($i = 0; $i <=2; $i++) {
@@ -28,11 +32,11 @@ function buildPivotSql(){
         // Format the new date as 'YYYY-MM'
         $forecastYear = $forecastYear->format('Y');
 
-        $sqlPivot .= "SUM(CASE WHEN forecastDate BETWEEN '$forecastYear-01' AND '$forecastYear-12' THEN cost ELSE 0 END) AS 'Total_$forecastYear', ";
+        $sqlPivot .= "SUM(CASE WHEN forecastDate BETWEEN '$forecastYear-01' AND '$forecastYear-12' THEN cost ELSE 0 END) AS 'Total ".$forecastYear."', ";
     }
 
     // Loop months
-    for ($i = 0; $i <= 23; $i++) {
+    for ($i = 0; $i < $ForecastPeriod ; $i++) {
         
         // Create a DateTime object for the current date
         $forecastDate = new DateTime();

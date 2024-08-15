@@ -85,7 +85,7 @@ function forecastExcel($db, $ForecastPeriod){
     // Write header row -------------------------
 
     // query string
-    $sql = buildPivotSql();
+    $sql = buildPivotSql($db);
     
     // extract titles from string of pivot-query
     $titles = extract_titles_from_sql($sql);
@@ -205,7 +205,7 @@ function abcAnalysesExcel($db){
             if(is_numeric($value)){
                 $value = floatval($item[$title]);
                 $value = round($value,2);
-                $value = number_format($value,2); 
+                $value = number_format($value,2)/100; 
 
             }
 

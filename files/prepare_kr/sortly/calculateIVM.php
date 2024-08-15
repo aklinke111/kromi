@@ -25,33 +25,36 @@ if (isset($_GET['webhookFunction'])) {
         echo orderedIVM($db);
         echo "<p>";            
 
-        echo forecastInstallations($db, 'Remove');
-        echo "<p>";  
-        echo forecastInstallations($db, 'Install');
-        echo "<p>";  
-        
-        echo calculateQuantityIvmProjects($db, 'Remove');
+//        echo forecastInstallations($db, 'Remove');
+//        echo "<p>";  
+//        echo forecastInstallations($db, 'Install');
+//        echo "<p>";  
+//        
+        echo calculateQuantityIvmProjects($db, 'remove', 'all');
         echo "<p>";   
-        echo calculateQuantityIvmProjects($db, 'Install');
-        echo "<p>";  
+        echo calculateQuantityIvmProjects($db, 'install', 'facelift');
+        echo "<p>"; 
+        echo calculateQuantityIvmProjects($db, 'install', 'new');
+        echo "<p>";          
             
         echo quantityOnStockIVM($db, 1);
-        echo "<p>";  
-//        echo quantityOnStockIVM($db, 0);
-//        echo "<p>";  
+        echo "<p>"; 
+        echo quantityOnStockIVM($db, 2);
+        echo "<p>";         
         echo calculateRawIvmOnStock($db);
         echo "<p>";  
         
         echo lookupQuantityValue($db, 'quantityMinimum');
         echo "<p>"; 
-        echo lookupQuantityValue($db, 'quantityExtra');
-        echo "<p>"; 
-       
-        echo totalNeededQuantity($db, 'New');
-        echo "<p>"; 
-        echo totalNeededQuantity($db, 'Facelift');
-        echo "<p>"; 
+//        echo lookupQuantityValue($db, 'quantityExtra');
+//        echo "<p>"; 
+
+        echo totalNeededIVM($db);
+        echo "<p>";         
         
+        echo personnelVM($db);
+        echo "<p>";         
+
         echo lookupQuantityOverAll($db);
         echo "<p>"; 
     }

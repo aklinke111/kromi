@@ -92,7 +92,7 @@ $GLOBALS['TL_DCA']['tl_toolcenterProjects'] = [
                 'filter'                  => true,
                 'search'                  => true,   
                 'sorting'                 => true,
-                'foreignKey'              => "tl_country.name",                                          
+                'foreignKey'              => "sortly_country.name",                                          
                 'eval'                    => array('includeBlankOption'=>true,'tl_class'=>'w50 wizard'),
                 'sql' => ['type' => 'string', 'length' => 10, 'default' => '']
         ),        

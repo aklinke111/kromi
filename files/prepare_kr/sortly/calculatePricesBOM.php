@@ -23,8 +23,18 @@ function main($db) {
     $sql = "TRUNCATE TABLE bomCalculations";
     $result = $db->query($sql);
 
-    // loop all IVMs
-    $sql = "Select id, sortlyId, name, quantity, price from tl_sortlyTemplatesIVM";
+    // loop all IVM
+    $sql = "Select
+        tl_sortlyTemplatesIVM.id,
+        tl_sortlyTemplatesIVM.price,
+        tl_sortlyTemplatesIVM.name,
+        kr_quantityIVM.quantity,
+        kr_quantityIVM.quantityName
+    From
+        tl_sortlyTemplatesIVM Inner Join
+        kr_quantityIVM On tl_sortlyTemplatesIVM.id = kr_quantityIVM.id_ivm
+    Where
+        kr_quantityIVM.quantityName Like 'quantityNeeded'";
     
     // Without Facelifts
 //    $sql = "Select id, sortlyId, name, quantity, price from tl_sortlyTemplatesIVM Where exclude = 0";

@@ -24,7 +24,7 @@ function insertQuantity($db, $id_ivm, $quantityName, $quantity, $note, $exclude,
         )";
 
    $stmt = $db->prepare($sql);
-   $parameterTypes = "iisiisi";
+   $parameterTypes = "iisdisi";
    $stmt->bind_param($parameterTypes,
         time(),
         $id_ivm,
@@ -36,33 +36,8 @@ function insertQuantity($db, $id_ivm, $quantityName, $quantity, $note, $exclude,
    );
     // Execute the statement
     if($stmt->execute()){
-        return "Succesfully inserted 'kr_quantityIVM.$quantityName' for IVM-ID $id_ivm [$nameIVM] with quantity of <b> $quantity pc. </b>$note";
+        return "Succesfully inserted 'kr_quantityIVM.$quantityName' for IVM-ID $id_ivm [$nameIVM] with quantity of <b> $quantity </b>$note";
     } else {
-        return "Error inserting 'kr_quantityIVM.$quantityName' for IVM-ID $id_ivm [$nameIVM] with quantity of $quantity pcs ";
-    }
- 
-}
-
-
-function regionsToArray($db){
-    $arrayRegions = array();
-    
-    $sql = "Select id from tl_region";
-    $result = $db->query($sql);
-    
-    while($item = $result->fetch_assoc()){ 
-        $arrayRegions[] = $item['id'];
-    }
-    return $arrayRegions;
-}
-
-
-function lookupNameIVM($db, $id_ivm){
-    
-    $sql = "Select name from tl_sortlyTemplatesIVM WHERE id = $id_ivm";
-    $result = $db->query($sql);
-    
-    while($item = $result->fetch_assoc()){ 
-        return $item['name'];
+        return "Error inserting 'kr_quantityIVM.$quantityName' for IVM-ID $id_ivm [$nameIVM] with quantity of $quantity ";
     }
 }

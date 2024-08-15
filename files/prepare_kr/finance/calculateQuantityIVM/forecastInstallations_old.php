@@ -72,6 +72,16 @@ Order By
         $exclude = 0;
         $quantityName = "quantityForecastInstallations".$removeInstall;
         $note = "period of $HistoryPeriod months in $regionName [$exclude]";
+        
+        // overwrite  Helix Master (5 to 17) and Slave (2 to 16) to assign Facelift ids - DELETE after facelift measures!
+        if($id == 5){$id = 17;}
+        if($id == 2){$id = 16;} 
+        
+        // Exception  for Helix-Slave Facelifts Brazil - exclude - DELETE later !
+        if($id == 16 and $regionId == 2){
+            $id = 18;
+            $note = "IVMs $expression on KROMI stock !!! changed from Helic-Slave Facelift to electronic board !!!! $regionName [$exclude]";
+        }
 
         $msg .= insertQuantity($db, $id, $quantityName, $quantity, $note, $exclude, $regionId);
         $msg .= "<br>";
