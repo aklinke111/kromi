@@ -3,6 +3,7 @@ include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
 
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/functions/_includes.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/_includes.php";
+include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/finance/_includes.php";
 
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/src/stats/sortlyStats.php";
 include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/sortly/ivmBomDisplayAndUpdate.php";
@@ -52,7 +53,17 @@ function financeForecast_main($db){
     $HistoryPeriod = globalVal($db, 'HistoryPeriod');
     $msg .= "Period in months for considering German installations. ".$HistoryPeriod."<br>"; 
     
+    
+    // average value for IVM
+    $totalPriceAllIVMs = lookupTotalPriceAllIVM($db);
+    $totalCountAllIVMs = lookupTotalCountIVM($db);
+    $averageValueIVM = round($totalPriceAllIVMs / $totalCountAllIVMs,2); 
+    $msg .= "Average price of IVM: $averageValueIVM €<br>"; 
+        
+    
     $msg .=  "---------------------------------------------------------------------- <p>";
+    
+    echo $msg;
     
     for ($i = 0; $i <= ($ForecastPeriod-1); $i++) {
 

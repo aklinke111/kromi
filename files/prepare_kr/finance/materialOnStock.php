@@ -4,22 +4,22 @@ include_once $_SERVER['DOCUMENT_ROOT']."/files/prepare_kr/db/dbConfig.php";
 
 function materialOnStock($db, $id, $forecastDate, $ForecastPeriod, $sortlyPid){
     
+  
     $msg = "";
-    $HistoryPeriod = globalVal($db, 'HistoryPeriod');
+    
+    // pid:  Europe = 58670984 ; South America = 71412763
 
     $sql = "Select
         Sum(sortly.price * sortly.quantity) As totalMaterialValue,
+        sortly.pid,
         sortly1.name as pidName
     From
-        sortly Right Join
-        bomCalculations On sortly.sortlyId = bomCalculations.sortlyId Inner Join
+        sortly Inner Join
         sortly sortly1 On sortly1.sid = sortly.pid
     Where
         sortly.pid = '$sortlyPid' And
-        sortly.IVM = 0 And
-        sortly.discontinued = 0
+        sortly.IVM = 0
     Group By
-        sortly.pid,
         sortly1.name
     ";
     $result = $db->query($sql);

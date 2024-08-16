@@ -5,13 +5,15 @@
 function forecastDate($i){
     // Create a DateTime object for the current date
     $forecastDate = new DateTime();
+//    $forecastDate->modify('-1 month');
     
     //Add one month to the current date
     $modifyer = "+$i month";
     $forecastDate->modify($modifyer);
     
     // Format the new date as 'YYYY-MM'
-    return $forecastDate->format('Y-m');
+    echo $forecastDate->format('Y-m')."<br>";
+     return $forecastDate->format('Y-m');
 //    return $forecastDate = $forecastDate->format('Y-m');
 }
 

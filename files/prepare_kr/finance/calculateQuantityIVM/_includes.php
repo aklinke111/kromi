@@ -12,3 +12,6 @@ include_once "stockIVM.php";
 
 include_once "personnelVM.php";
 include_once "totalNeededIVM.php";
+
+include_once "quantityStats.php";
+

@@ -113,9 +113,16 @@ function forecastExcel($db, $ForecastPeriod){
         
         $category = $item['category'];
         $switchPositiveNegative = (-1);
-        if ($category == 'Pending Orders - internal'){
-            $switchPositiveNegative = (1);
+        
+        switch ($category) {
+            case 'Pending Orders - internal':
+                $switchPositiveNegative = (1);
+            case 'Parts on Stock - Europe':
+                $switchPositiveNegative = (1);
+            case 'Parts on Stock - South America':
+                $switchPositiveNegative = (1);
         }
+        
         // fetch a data row
        $excelContent .= '<Row>'; 
        
